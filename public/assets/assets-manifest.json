@@ -1,0 +1,201 @@
+{
+    "bundles": {
+        "home": {
+            "basePath": "assets/",
+            "assets": {
+                "home/home-atlas/logo-game.png": {
+                    "src": "home/home-atlas/logo-game.png"
+                }
+            }
+        },
+        "game": {
+            "basePath": "assets/",
+            "assets": {
+                "game/game-atlas/books-01.png": {
+                    "src": "game/game-atlas/books-01.png"
+                },
+                "game/game-atlas/books-02.png": {
+                    "src": "game/game-atlas/books-02.png"
+                },
+                "game/game-atlas/books-03.png": {
+                    "src": "game/game-atlas/books-03.png"
+                },
+                "game/game-atlas/books-04.png": {
+                    "src": "game/game-atlas/books-04.png"
+                },
+                "game/game-atlas/books-05.png": {
+                    "src": "game/game-atlas/books-05.png"
+                },
+                "game/game-atlas/game-header.png": {
+                    "src": "game/game-atlas/game-header.png"
+                },
+                "game/game-atlas/highlight.png": {
+                    "src": "game/game-atlas/highlight.png"
+                },
+                "game/game-atlas/num-stroke-1.png": {
+                    "src": "game/game-atlas/num-stroke-1.png"
+                },
+                "game/game-atlas/num-stroke-2.png": {
+                    "src": "game/game-atlas/num-stroke-2.png"
+                },
+                "game/game-atlas/num-stroke-3.png": {
+                    "src": "game/game-atlas/num-stroke-3.png"
+                },
+                "game/game-atlas/num-stroke-4.png": {
+                    "src": "game/game-atlas/num-stroke-4.png"
+                },
+                "game/game-atlas/num-stroke-5.png": {
+                    "src": "game/game-atlas/num-stroke-5.png"
+                },
+                "game/game-atlas/piece-dragon.png": {
+                    "src": "game/game-atlas/piece-dragon.png"
+                },
+                "game/game-atlas/piece-frog.png": {
+                    "src": "game/game-atlas/piece-frog.png"
+                },
+                "game/game-atlas/piece-newt.png": {
+                    "src": "game/game-atlas/piece-newt.png"
+                },
+                "game/game-atlas/piece-snake.png": {
+                    "src": "game/game-atlas/piece-snake.png"
+                },
+                "game/game-atlas/piece-spider.png": {
+                    "src": "game/game-atlas/piece-spider.png"
+                },
+                "game/game-atlas/piece-yeti.png": {
+                    "src": "game/game-atlas/piece-yeti.png"
+                },
+                "game/game-atlas/shelf-block.png": {
+                    "src": "game/game-atlas/shelf-block.png"
+                },
+                "game/game-atlas/shelf-corner.png": {
+                    "src": "game/game-atlas/shelf-corner.png"
+                },
+                "game/game-atlas/special-blast.png": {
+                    "src": "game/game-atlas/special-blast.png"
+                },
+                "game/game-atlas/special-colour.png": {
+                    "src": "game/game-atlas/special-colour.png"
+                },
+                "game/game-atlas/special-column.png": {
+                    "src": "game/game-atlas/special-column.png"
+                },
+                "game/game-atlas/special-row.png": {
+                    "src": "game/game-atlas/special-row.png"
+                }
+            }
+        },
+        "common": {
+            "basePath": "assets/",
+            "assets": {
+                "common/common-atlas/button-large-hover.png": {
+                    "src": "common/common-atlas/button-large-hover.png"
+                },
+                "common/common-atlas/button-large-press.png": {
+                    "src": "common/common-atlas/button-large-press.png"
+                },
+                "common/common-atlas/button-large.png": {
+                    "src": "common/common-atlas/button-large.png"
+                },
+                "common/common-atlas/button-small-hover.png": {
+                    "src": "common/common-atlas/button-small-hover.png"
+                },
+                "common/common-atlas/button-small-press.png": {
+                    "src": "common/common-atlas/button-small-press.png"
+                },
+                "common/common-atlas/button-small.png": {
+                    "src": "common/common-atlas/button-small.png"
+                },
+                "common/common-atlas/character.png": {
+                    "src": "common/common-atlas/character.png"
+                },
+                "common/common-atlas/icon-back-stroke.png": {
+                    "src": "common/common-atlas/icon-back-stroke.png"
+                },
+                "common/common-atlas/icon-back.png": {
+                    "src": "common/common-atlas/icon-back.png"
+                },
+                "common/common-atlas/icon-info-stroke.png": {
+                    "src": "common/common-atlas/icon-info-stroke.png"
+                },
+                "common/common-atlas/icon-info.png": {
+                    "src": "common/common-atlas/icon-info.png"
+                },
+                "common/common-atlas/icon-pause-stroke.png": {
+                    "src": "common/common-atlas/icon-pause-stroke.png"
+                },
+                "common/common-atlas/icon-pause.png": {
+                    "src": "common/common-atlas/icon-pause.png"
+                },
+                "common/common-atlas/icon-settings-stroke.png": {
+                    "src": "common/common-atlas/icon-settings-stroke.png"
+                },
+                "common/common-atlas/icon-settings.png": {
+                    "src": "common/common-atlas/icon-settings.png"
+                },
+                "common/common-atlas/rounded-rectangle.png": {
+                    "src": "common/common-atlas/rounded-rectangle.png"
+                },
+                "common/common-atlas/star.png": {
+                    "src": "common/common-atlas/star.png"
+                },
+                "common/common-atlas/white-cauldron.png": {
+                    "src": "common/common-atlas/white-cauldron.png"
+                },
+                "common/bgm-game.mp3": {
+                    "src": "common/bgm-game.mp3"
+                },
+                "common/bgm-main.mp3": {
+                    "src": "common/bgm-main.mp3"
+                },
+                "common/dragon-skeleton.atlas": {
+                    "src": "common/dragon-skeleton.atlas"
+                },
+                "common/dragon-skeleton.json": {
+                    "src": "common/dragon-skeleton.json"
+                },
+                "common/dragon-skeleton.png": {
+                    "src": "common/dragon-skeleton.png"
+                },
+                "common/sfx-bubble.wav": {
+                    "src": "common/sfx-bubble.wav"
+                },
+                "common/sfx-correct.wav": {
+                    "src": "common/sfx-correct.wav"
+                },
+                "common/sfx-countdown.wav": {
+                    "src": "common/sfx-countdown.wav"
+                },
+                "common/sfx-hover.wav": {
+                    "src": "common/sfx-hover.wav"
+                },
+                "common/sfx-incorrect.wav": {
+                    "src": "common/sfx-incorrect.wav"
+                },
+                "common/sfx-match.wav": {
+                    "src": "common/sfx-match.wav"
+                },
+                "common/sfx-points.wav": {
+                    "src": "common/sfx-points.wav"
+                },
+                "common/sfx-press.wav": {
+                    "src": "common/sfx-press.wav"
+                },
+                "common/sfx-special.wav": {
+                    "src": "common/sfx-special.wav"
+                }
+            }
+        },
+        "preload": {
+            "basePath": "assets/",
+            "assets": {
+                "preload/preload-atlas/background.png": {
+                    "src": "preload/preload-atlas/background.png"
+                },
+                "common/sound.mp3": {
+                    "src": "common/sound.mp3"
+                }
+            }
+        }
+    }
+}

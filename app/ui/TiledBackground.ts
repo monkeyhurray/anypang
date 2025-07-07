@@ -9,7 +9,9 @@ export class TiledBackground extends Container {
     }
 
     public async init(app: Application) {
-        const texture = await Assets.load("assets/preload/background.png");
+        const texture = await Assets.load(
+            "assets/preload/preload-atlas/background.png"
+        );
 
         this.sprite = new TilingSprite({
             texture,

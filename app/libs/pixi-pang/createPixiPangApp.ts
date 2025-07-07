@@ -2,6 +2,7 @@ import { Application, Graphics, Renderer, Sprite, Texture } from "pixi.js";
 
 export const createPixiPangApp = async (): Promise<Application<Renderer>> => {
     const app = new Application();
+
     await app.init({
         resizeTo: window,
         backgroundColor: 0xffffff,

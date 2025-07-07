@@ -29,9 +29,8 @@ interface AppScreen extends Container {
 }
 
 /** Interface for app screens constructors */
-interface AppScreenConstructor {
-    new (): AppScreen;
-    /** List of assets bundles required by the screen */
+interface AppScreenConstructor<T = any> {
+    new (...args: T[]): AppScreen;
     assetBundles?: string[];
 }
 
@@ -125,25 +124,21 @@ class Navigation {
      * Hide current screen (if there is one) and present a new screen.
      * Any class that matches AppScreen interface can be used here.
      */
-    public async showScreen(ctor: AppScreenConstructor) {
-        // Block interactivity in current screen
+    public async showScreen<T>(ctor: AppScreenConstructor<T>, ...args: T[]) {
         if (this.currentScreen) {
             this.currentScreen.interactiveChildren = false;
         }
 
-        // Load assets for the new screen, if available
         if (ctor.assetBundles && !areBundlesLoaded(ctor.assetBundles)) {
-            // Load all assets required by this new screen
             await loadBundles(ctor.assetBundles);
         }
 
-        // If there is a screen already created, hide and destroy it
         if (this.currentScreen) {
             await this.hideAndRemoveScreen(this.currentScreen);
         }
 
-        // Create the new screen and add that to the stage
-        this.currentScreen = pool.get(ctor);
+        // 변경: 생성자에 인수를 전달
+        this.currentScreen = new ctor(...args);
         await this.addAndShowScreen(this.currentScreen);
     }
 

@@ -1,4 +1,4 @@
-import { Assets, AssetsManifest } from 'pixi.js';
+import { Assets, AssetsManifest } from "pixi.js";
 
 /** List of assets grouped in bundles, for dynamic loading */
 let assetsManifest: AssetsManifest = { bundles: [] };
@@ -13,23 +13,26 @@ function checkBundleExists(bundle: string) {
 
 /** Load assets bundles that have nott been loaded yet */
 export async function loadBundles(bundles: string | string[]) {
-    if (typeof bundles === 'string') bundles = [bundles];
+    if (typeof bundles === "string") bundles = [bundles];
 
     // Check bundles requested if they exists
     for (const bundle of bundles) {
         if (!checkBundleExists(bundle)) {
+            console.log(bundles);
             throw new Error(`[Assets] Invalid bundle: ${bundle}`);
         }
     }
 
     // Filter out bundles already loaded
-    const loadList = bundles.filter((bundle) => !loadedBundles.includes(bundle));
+    const loadList = bundles.filter(
+        (bundle) => !loadedBundles.includes(bundle)
+    );
 
     // Skip if there is no bundle left to be loaded
     if (!loadList.length) return;
 
     // Load bundles
-    console.log('[Assets] Load:', loadList.join(', '));
+    console.log("[Assets] Load:", loadList.join(", "));
     await Assets.loadBundle(loadList);
 
     // Append loaded bundles to the loaded list
@@ -54,7 +57,7 @@ async function fetchAssetsManifest(url: string) {
     const response = await fetch(url);
     const manifest = await response.json();
     if (!manifest.bundles) {
-        throw new Error('[Assets] Invalid assets manifest');
+        throw new Error("[Assets] Invalid assets manifest");
     }
     return manifest;
 }
@@ -62,13 +65,13 @@ async function fetchAssetsManifest(url: string) {
 /** Initialise and start background loading of all assets */
 export async function initAssets() {
     // Load assets manifest
-    assetsManifest = await fetchAssetsManifest('assets/assets-manifest.json');
+    assetsManifest = await fetchAssetsManifest("assets/assets-manifest.json");
 
     // Init PixiJS assets with this asset manifest
-    await Assets.init({ manifest: assetsManifest, basePath: 'assets' });
+    await Assets.init({ manifest: assetsManifest, basePath: "assets" });
 
     // Load assets for the load screen
-    await loadBundles('preload');
+    await loadBundles("preload");
 
     // List all existing bundles names
     const allBundles = assetsManifest.bundles.map((item) => item.name);

@@ -19,7 +19,7 @@ import {
  */
 export class Match3Board {
     /** The Match3 instance */
-    public match3: Match3;
+
     /** The grid state, with only numbers */
     public grid: Match3Grid = [];
     /** All piece sprites currently being used in the grid */
@@ -39,9 +39,7 @@ export class Match3Board {
     /** Map piece types to piece names */
     public typesMap!: Record<number, string>;
 
-    constructor(match3: Match3) {
-        this.match3 = match3;
-
+    constructor(public match3: Match3) {
         this.piecesContainer = new Container();
         this.match3.addChild(this.piecesContainer);
 

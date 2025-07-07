@@ -18,7 +18,7 @@ import { ResultScore } from "../ui/ResultScore";
 import { RippleButton } from "../ui/RippleButton";
 import { SettingsPopup } from "../popups/SettingsPopup";
 import { bgm, sfx } from "../utils/audio";
-import { userSettings } from "../utils/userSettings";
+import { getUserSettings } from "../utils/userSettings";
 import { waitFor } from "../utils/asyncUtils";
 import { MaskTransition } from "../ui/MaskTransition";
 import { userStats } from "../utils/userStats";
@@ -26,13 +26,12 @@ import { userStats } from "../utils/userStats";
 /** APpears after gameplay ends, displaying scores and grade */
 export class ResultScreen extends Container {
     /** Assets bundles required by this screen */
-    private gameScreen;
-    private app: Application;
+
     public static assetBundles = ["result", "common"];
     /** The centered box area containing the results */
     private panel: Container;
     /** Animated dragon */
-    private dragon: Dragon;
+    // private dragon: Dragon;
     /** The panel background */
     private panelBase: Sprite;
     /** The screen title */
@@ -58,10 +57,8 @@ export class ResultScreen extends Container {
     /** A special transition that temporarely masks the entire screen */
     private maskTransition?: MaskTransition;
 
-    constructor(app: Application) {
+    constructor(public app: Application) {
         super();
-
-        this.app = app;
 
         this.settingsButton = new RippleButton({
             image: "icon-settings",
@@ -72,9 +69,9 @@ export class ResultScreen extends Container {
         );
         this.addChild(this.settingsButton);
 
-        this.dragon = new Dragon();
-        this.dragon.playTransition();
-        this.addChild(this.dragon);
+        // this.dragon = new Dragon();
+        // this.dragon.playTransition();
+        // this.addChild(this.dragon);
 
         this.panel = new Container();
         this.addChild(this.panel);
@@ -130,9 +127,9 @@ export class ResultScreen extends Container {
 
         this.continueButton = new LargeButton({ text: i18n.resultPlay });
         this.addChild(this.continueButton);
-        this.gameScreen = new GameScreen(app);
+
         this.continueButton.onPress.connect(() =>
-            navigation.showScreen(this.gameScreen)
+            navigation.showScreen(GameScreen)
         );
 
         this.maskTransition = new MaskTransition();
@@ -143,22 +140,22 @@ export class ResultScreen extends Container {
         this.bottomBase.visible = false;
         this.continueButton.visible = false;
         this.panel.visible = false;
-        this.dragon.visible = false;
+        // this.dragon.visible = false;
         this.score.visible = false;
         this.bestScore.visible = false;
         this.message.hide(false);
         this.stars.hide(false);
 
         this.title.text = `${i18n.resultTitle}`;
-        const mode = userSettings.getGameMode();
+        const mode = getUserSettings().getGameMode();
         const readableMode = (i18n as any)[mode + "Mode"];
         this.mode.text = `${readableMode}`;
     }
 
     /** Resize the screen, fired whenever window size changes */
     public resize(width: number, height: number) {
-        this.dragon.x = width * 0.5 + 20;
-        this.dragon.y = height * 0.5 - 210;
+        // this.dragon.x = width * 0.5 + 20;
+        // this.dragon.y = height * 0.5 - 210;
         this.panel.x = width * 0.5;
         this.panel.y = height * 0.5;
         this.continueButton.x = width * 0.5;
@@ -178,9 +175,9 @@ export class ResultScreen extends Container {
 
         // Wait a little bit before showing all screen components
         await waitFor(0.5);
-        const mode = userSettings.getGameMode();
+        const mode = getUserSettings().getGameMode();
         const performance = userStats.load(mode);
-        this.showDragon();
+        // this.showDragon();
         await this.showPanel();
         this.animateGradeStars(performance.grade);
         await this.animatePoints(performance.score);
@@ -191,42 +188,42 @@ export class ResultScreen extends Container {
     /** Hide screen with animations */
     public async hide() {
         this.hideBottom();
-        await this.hideDragon();
+        // await this.hideDragon();
         await this.hidePanel();
     }
 
     /** Reveal the animated dragon behind the panel */
-    private async showDragon() {
-        gsap.killTweensOf(this.dragon.scale);
-        gsap.killTweensOf(this.dragon.pivot);
-        this.dragon.visible = true;
-        this.dragon.scale.set(0);
-        this.dragon.pivot.y = -300;
-        gsap.to(this.dragon.pivot, {
-            y: 0,
-            duration: 0.7,
-            ease: "back.out",
-            delay: 0.1,
-        });
-        await gsap.to(this.dragon.scale, {
-            x: 1,
-            y: 1,
-            duration: 0.3,
-            ease: "back.out",
-            delay: 0.2,
-        });
-    }
+    // private async showDragon() {
+    //     gsap.killTweensOf(this.dragon.scale);
+    //     gsap.killTweensOf(this.dragon.pivot);
+    //     this.dragon.visible = true;
+    //     this.dragon.scale.set(0);
+    //     this.dragon.pivot.y = -300;
+    //     gsap.to(this.dragon.pivot, {
+    //         y: 0,
+    //         duration: 0.7,
+    //         ease: "back.out",
+    //         delay: 0.1,
+    //     });
+    //     await gsap.to(this.dragon.scale, {
+    //         x: 1,
+    //         y: 1,
+    //         duration: 0.3,
+    //         ease: "back.out",
+    //         delay: 0.2,
+    //     });
+    // }
 
     /** Hide the animated dragon behind the panel */
-    private async hideDragon() {
-        gsap.killTweensOf(this.dragon.pivot);
-        await gsap.to(this.dragon.pivot, {
-            y: -100,
-            duration: 0.2,
-            ease: "back.in",
-        });
-        this.dragon.scale.set(0);
-    }
+    // private async hideDragon() {
+    //     gsap.killTweensOf(this.dragon.pivot);
+    //     await gsap.to(this.dragon.pivot, {
+    //         y: -100,
+    //         duration: 0.2,
+    //         ease: "back.in",
+    //     });
+    //     this.dragon.scale.set(0);
+    // }
 
     /** Show the container box panel animated */
     private async showPanel() {
@@ -301,7 +298,7 @@ export class ResultScreen extends Container {
 
         if (!points) return;
 
-        const mode = userSettings.getGameMode();
+        const mode = getUserSettings().getGameMode();
         const bestScore = userStats.loadBestScore(mode);
 
         this.bestScore.show();

@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPixiPangApp } from "../libs/pixi-pang/createPixiPangApp";
 import { Application, Container } from "pixi.js";
-
+import { Assets } from "pixi.js";
 import { TiledBackground } from "@/app/ui/TiledBackground";
 import { navigation } from "@/app/utils/navigation";
 import resize from "../libs/pixi-pang/resizeBackground";
@@ -12,15 +12,21 @@ import { GameScreen } from "../screens/GameScreen";
 import { LoadScreen } from "../screens/LoadScreen";
 import { ResultScreen } from "../screens/ResultScreen";
 import { HomeScreen } from "../screens/HomeScreen";
+import { loadAssetManifest } from "../utils/manifest";
+import manifest from "../../public/assets/assets-manifest.json";
+import { loadGameAssets } from "../libs/loadAssets";
 
 const GameCanvas = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const appRef = useRef<Application | null>(null);
+    const [progress, setProgress] = useState(0);
 
     useEffect(() => {
         let cleanup: (() => void) | undefined;
 
         const initPixi = async () => {
+            // await loadAssetManifest();
+            await loadGameAssets((p) => setProgress(p));
             const app = await createPixiPangApp();
             appRef.current = app;
 
@@ -44,13 +50,10 @@ const GameCanvas = () => {
             window.addEventListener("resize", handleResize);
             handleResize();
 
-            const gameScreen = new GameScreen(app);
-            const loadScreen = new LoadScreen(app);
-
             if (getUrlParam("game") !== null) {
-                await navigation.showScreen(gameScreen);
+                await navigation.showScreen(GameScreen);
             } else if (getUrlParam("load") !== null) {
-                await navigation.showScreen(loadScreen);
+                await navigation.showScreen(LoadScreen);
             } else if (getUrlParam("result") !== null) {
                 await navigation.showScreen(ResultScreen);
             } else {

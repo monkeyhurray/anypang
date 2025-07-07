@@ -22,16 +22,17 @@ import { PausePopup } from "../popups/PausePopup";
 import { GameCountdown } from "../ui/GameCountdown";
 import { GameEffects } from "../ui/GameEffects";
 import { bgm } from "../utils/audio";
-import { userSettings } from "../utils/userSettings";
+import { getUserSettings } from "../utils/userSettings";
 import { GameTimesUp } from "../ui/GameTimesUp";
 import { GameOvertime } from "../ui/GameOvertime";
 import { waitFor } from "../utils/asyncUtils";
 import { match3GetConfig, Match3Mode } from "../match3/Match3Config";
 import { userStats } from "../utils/userStats";
+import { createPixiPangApp } from "../libs/pixi-pang/createPixiPangApp";
 
 /** The screen tha holds the Match3 game */
 export class GameScreen extends Container {
-    private app: Application;
+    public app: Application;
     /** Assets bundles required by this screen */
     public static assetBundles = ["game", "common"];
     /** The Math3 game */
@@ -55,7 +56,7 @@ export class GameScreen extends Container {
     /** Countdown displayed before actual gameplay starts */
     public readonly countdown: GameCountdown;
     /** Countdown displayed when the gameplay is about to finish */
-    public readonly overtime: GameOvertime;
+    public overtime: GameOvertime;
     /** The time's up message that shows up when gameplay finishes */
     public readonly timesUp: GameTimesUp;
     /** The match3 book shelf background */
@@ -67,6 +68,7 @@ export class GameScreen extends Container {
 
     constructor(app: Application) {
         super();
+
         this.app = app;
 
         this.pauseButton = new RippleButton({
@@ -137,6 +139,14 @@ export class GameScreen extends Container {
 
         this.timesUp = new GameTimesUp();
         this.addChild(this.timesUp);
+
+        // this.init();
+    }
+
+    async init() {
+        const app = await createPixiPangApp();
+        this.overtime = new GameOvertime(app);
+        this.addChild(this.overtime);
     }
 
     /** Prepare the screen just before showing */
@@ -149,7 +159,7 @@ export class GameScreen extends Container {
             duration: getUrlParamNumber("duration") ?? 60,
             mode:
                 (getUrlParam("mode") as Match3Mode) ??
-                userSettings.getGameMode(),
+                getUserSettings().getGameMode(),
         });
 
         this.finished = false;
@@ -213,8 +223,10 @@ export class GameScreen extends Container {
         this.countdown.y = centerY;
         this.timesUp.x = centerX;
         this.timesUp.y = centerY;
-        this.overtime.x = this.gameContainer.x;
-        this.overtime.y = this.gameContainer.y;
+        if (this.overtime) {
+            this.overtime.x = this.gameContainer.x;
+            this.overtime.y = this.gameContainer.y;
+        }
     }
 
     /** Show screen with animations */
