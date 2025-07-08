@@ -15,7 +15,7 @@
     "@jridgewell/gen-mapping" "^0.3.5"
     "@jridgewell/trace-mapping" "^0.3.24"
 
-"@assetpack/cli@0.8.0":
+"@assetpack/cli@^0.8.0":
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/@assetpack/cli/-/cli-0.8.0.tgz#1280b34d81ff249ef78f58bd0cbc011ce702324e"
   integrity sha512-LlrqYUvdufvGsbTnBfByzUxgK+Es9PED30rb9YfHyvrhW/0yy9XtJkgC4nFsudwoF4KILiW4xUNO9RHOeJ0Cxg==
@@ -935,6 +935,11 @@
     "@node-rs/crc32-win32-arm64-msvc" "1.10.6"
     "@node-rs/crc32-win32-ia32-msvc" "1.10.6"
     "@node-rs/crc32-win32-x64-msvc" "1.10.6"
+
+"@pixi-spine/loader-uni@^4.0.6":
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/@pixi-spine/loader-uni/-/loader-uni-4.0.6.tgz#6724f50b6c1bb2a3b2e45b9d79957925c7447d76"
+  integrity sha512-DCu4YRVXoC/BGyxVVlWiaFs/4H62PbM6vx6OiH/Xt5PYSvYSAFlM/GnYRabgvFD0W1iOHQxfY4F7jdz8SjNs4Q==
 
 "@pixi/colord@^2.9.6":
   version "2.9.6"

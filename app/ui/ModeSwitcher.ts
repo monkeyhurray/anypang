@@ -1,24 +1,24 @@
-import { CheckBox, RadioGroup } from '@pixi/ui';
-import { Match3Mode } from '../match3/Match3Config';
-import { sfx } from '../utils/audio';
+import { CheckBox, RadioGroup } from "@pixi/ui";
+import { Match3Mode } from "../match3/Match3Config";
+// import { sfx } from '../utils/audio';
 
-import { i18n } from '../utils/i18n';
-import { Graphics } from 'pixi.js';
+import { i18n } from "../utils/i18n";
+import { Graphics } from "pixi.js";
 
 type ItemConfig = { mode: Match3Mode; text: string };
 
 /** List of switcher items */
 const items: ItemConfig[] = [
     {
-        mode: 'easy',
+        mode: "easy",
         text: i18n.easyMode,
     },
     {
-        mode: 'normal',
+        mode: "normal",
         text: i18n.normalMode,
     },
     {
-        mode: 'hard',
+        mode: "hard",
         text: i18n.hardMode,
     },
 ];
@@ -49,7 +49,7 @@ export class ModeSwitcher extends RadioGroup {
                                     padding,
                                     width - padding * 2,
                                     height - padding * 2,
-                                    radius - padding,
+                                    radius - padding
                                 )
                                 .fill({ color: fillColor }),
                             unchecked: new Graphics()
@@ -60,25 +60,25 @@ export class ModeSwitcher extends RadioGroup {
                                     padding,
                                     width - padding * 2,
                                     height - padding * 2,
-                                    radius - padding,
+                                    radius - padding
                                 ),
 
                             text: {
-                                fontFamily: 'Arial Rounded MT Bold',
+                                fontFamily: "Arial Rounded MT Bold",
                                 fontSize: 20,
                                 fill: 0xffffff,
                             },
                         },
-                    }),
+                    })
             ),
-            type: 'vertical',
+            type: "vertical",
             elementsMargin: 10,
             selectedItem: 0,
         });
 
         this.addChild(this.innerView);
         this.onChange.connect(() => {
-            sfx.play('common/sfx-press.wav');
+            // sfx.play('sfx-press.wav');
         });
     }
 
@@ -98,10 +98,10 @@ export class ModeSwitcher extends RadioGroup {
      * firing 'onChange' signal
      */
     public override selectItem(id: number) {
-        this['items'].forEach((item: CheckBox, key: number) => {
+        this["items"].forEach((item: CheckBox, key: number) => {
             item.forceCheck(key === id);
         });
-        this.value = this['options'].items[id].text;
+        this.value = this["options"].items[id].text;
         const changed = this.selected !== id;
         this.selected = id;
         if (changed) this.onChange.emit(id, this.value);

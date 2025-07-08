@@ -1,4 +1,4 @@
-import { Application, Container, Ticker } from "pixi.js";
+import { Application, Assets, Container, Ticker } from "pixi.js";
 import gsap from "gsap";
 import {
     Match3,
@@ -10,7 +10,7 @@ import {
 import { Shelf } from "../ui/Shelf";
 import { getUrlParam, getUrlParamNumber } from "../utils/getUrlParams";
 import { GameTimer } from "../ui/GameTimer";
-import { navigation } from "../utils/navigation";
+import { getNavigation, Navigation } from "../utils/navigation";
 import { ResultScreen } from "./ResultScreen";
 import { GameScore } from "../ui/GameScore";
 import { CloudLabel } from "../ui/CloudLabel";
@@ -28,9 +28,9 @@ import { GameOvertime } from "../ui/GameOvertime";
 import { waitFor } from "../utils/asyncUtils";
 import { match3GetConfig, Match3Mode } from "../match3/Match3Config";
 import { userStats } from "../utils/userStats";
-import { createPixiPangApp } from "../libs/pixi-pang/createPixiPangApp";
 
 /** The screen tha holds the Match3 game */
+
 export class GameScreen extends Container {
     public app: Application;
     /** Assets bundles required by this screen */
@@ -38,7 +38,7 @@ export class GameScreen extends Container {
     /** The Math3 game */
     public readonly match3: Match3;
     /** Animated cauldron */
-    public readonly cauldron: Cauldron;
+    // public readonly cauldron: Cauldron;
     /** Inner container for the match3 */
     public readonly gameContainer: Container;
     /** The gameplay timer display */
@@ -68,8 +68,8 @@ export class GameScreen extends Container {
 
     constructor(app: Application) {
         super();
-
         this.app = app;
+        const navigation = getNavigation();
 
         this.pauseButton = new RippleButton({
             image: "icon-pause",
@@ -122,11 +122,11 @@ export class GameScreen extends Container {
         this.comboLevel.hide(false);
         this.addChild(this.comboLevel);
 
-        this.cauldron = new Cauldron(true);
-        this.addChild(this.cauldron);
+        // this.cauldron = new Cauldron(true);
+        // this.addChild(this.cauldron);
 
         this.timer = new GameTimer();
-        this.cauldron.addContent(this.timer);
+        // this.cauldron.addContent(this.timer);
 
         this.vfx = new GameEffects(this);
         this.addChild(this.vfx);
@@ -139,14 +139,6 @@ export class GameScreen extends Container {
 
         this.timesUp = new GameTimesUp();
         this.addChild(this.timesUp);
-
-        // this.init();
-    }
-
-    async init() {
-        const app = await createPixiPangApp();
-        this.overtime = new GameOvertime(app);
-        this.addChild(this.overtime);
     }
 
     /** Prepare the screen just before showing */
@@ -161,12 +153,12 @@ export class GameScreen extends Container {
                 (getUrlParam("mode") as Match3Mode) ??
                 getUserSettings().getGameMode(),
         });
-
+        const navigation = getNavigation();
         this.finished = false;
         this.shelf?.setup(match3Config);
         this.match3.setup(match3Config);
         this.pauseButton.hide(false);
-        this.cauldron.hide(false);
+        // this.cauldron.hide(false);
         this.score.hide(false);
         gsap.killTweensOf(this.gameContainer.pivot);
         this.gameContainer.pivot.y = -navigation.height * 0.7;
@@ -213,8 +205,8 @@ export class GameScreen extends Container {
         this.comboMessage.y = div - 50;
         this.comboLevel.x = centerX + 150;
         this.comboLevel.y = div - 50;
-        this.cauldron.x = centerX;
-        this.cauldron.y = div - 60;
+        // this.cauldron.x = centerX;
+        // this.cauldron.y = div - 60;
         this.pauseButton.x = 30;
         this.pauseButton.y = 30;
         this.settingsButton.x = width - 30;
@@ -231,14 +223,14 @@ export class GameScreen extends Container {
 
     /** Show screen with animations */
     public async show() {
-        bgm.play("common/bgm-game.mp3", { volume: 0.5 });
+        // bgm.play("bgm-game.mp3", { volume: 0.5 });
         await gsap.to(this.gameContainer.pivot, {
             y: 0,
             duration: 0.5,
             ease: "back.out",
         });
         await this.countdown.show();
-        await this.cauldron.show();
+        // await this.cauldron.show();
         await this.countdown.hide();
         this.score.show();
         this.pauseButton.show();
@@ -293,6 +285,7 @@ export class GameScreen extends Container {
 
     /** Finish the gameplay, save stats and go to the results */
     private async finish() {
+        const navigation = getNavigation();
         if (this.finished) return;
         this.finished = true;
         this.match3.stopPlaying();
@@ -303,6 +296,7 @@ export class GameScreen extends Container {
 
     /** Auto pause the game when window go out of focus */
     public blur() {
+        const navigation = getNavigation();
         if (!navigation.currentPopup && this.match3.isPlaying()) {
             navigation.presentPopup(PausePopup);
         }

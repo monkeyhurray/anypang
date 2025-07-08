@@ -1,4 +1,3 @@
-import Image from "next/image";
 import GameCanvas from "./components/GameCanvas";
 
 const Home = () => {

@@ -1,3 +1,4 @@
+import { manifest } from "@/assets-manifest";
 import { Assets, AssetsManifest } from "pixi.js";
 
 /** List of assets grouped in bundles, for dynamic loading */
@@ -7,8 +8,12 @@ let assetsManifest: AssetsManifest = { bundles: [] };
 const loadedBundles: string[] = [];
 
 /** Check if a bundle exists in assetManifest  */
-function checkBundleExists(bundle: string) {
-    return !!assetsManifest.bundles.find((b) => b.name === bundle);
+// function checkBundleExists(bundle: string) {
+//     return !!assetsManifest.bundles.find((b) => b.name === bundle);
+// }
+
+function checkBundleExists(bundle: string): boolean {
+    return manifest.bundles.some((b) => b.name === bundle);
 }
 
 /** Load assets bundles that have nott been loaded yet */

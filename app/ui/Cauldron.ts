@@ -1,12 +1,14 @@
-import { Container, Sprite, Texture } from 'pixi.js';
-import gsap from 'gsap';
-import { randomRange } from '../utils/random';
-import { registerCustomEase } from '../utils/animation';
-import { pool } from '../utils/pool';
-import { Spine } from '@pixi/spine-pixi';
+import { Assets, Container, Sprite, Texture } from "pixi.js";
+import gsap from "gsap";
+import { randomRange } from "../utils/random";
+import { registerCustomEase } from "../utils/animation";
+import { pool } from "../utils/pool";
+import { Spine } from "@pixi/spine-pixi";
 
 /** Custom ease curve for splash drops y animation */
-const easeDropJumpOut = registerCustomEase('M0,0,C0,0,0.07,-0.63,0.402,-0.422,0.83,-0.152,1,1,1,1');
+const easeDropJumpOut = registerCustomEase(
+    "M0,0,C0,0,0.07,-0.63,0.402,-0.422,0.83,-0.152,1,1,1,1"
+);
 
 /**
  * Spine-animated cauldron, with some dynamic functionality, like
@@ -28,7 +30,7 @@ export class Cauldron extends Container {
         this.container = new Container();
         this.addChild(this.container);
 
-        this.shadow = Sprite.from('circle');
+        this.shadow = Sprite.from("circle");
         this.shadow.anchor.set(0.5);
         this.shadow.width = 180;
         this.shadow.height = 40;
@@ -38,14 +40,27 @@ export class Cauldron extends Container {
         this.shadow.visible = shadow;
         this.container.addChild(this.shadow);
 
+        const skeleton = Assets.get("cauldron-skeleton.json");
+        const atlas = Assets.get("cauldron-skeleton.atlas");
+
+        if (!skeleton) {
+            console.error("❌ skeleton 파일 로딩 실패");
+        }
+        if (!atlas) {
+            console.error("❌ atlas 파일 로딩 실패");
+        }
+
+        console.log("skeleton object:", skeleton); // .bones 있나 확인
+        console.log("atlas object:", atlas);
+
         this.spine = Spine.from({
-            skeleton: 'preload/cauldron-skeleton.json',
-            atlas: 'preload/cauldron-skeleton.atlas',
+            skeleton,
+            atlas,
         });
 
         this.spine.autoUpdate = true;
         this.spine.y = 50;
-        this.spine.state.setAnimation(0, 'animation', true);
+        this.spine.state.setAnimation(0, "animation", true);
         this.container.addChild(this.spine);
 
         this.onRender = () => this.renderUpdate();
@@ -57,7 +72,12 @@ export class Cauldron extends Container {
         this.visible = true;
         if (animated) {
             this.container.scale.set(0);
-            await gsap.to(this.container.scale, { x: 1, y: 1, duration: 0.3, ease: 'back.out' });
+            await gsap.to(this.container.scale, {
+                x: 1,
+                y: 1,
+                duration: 0.3,
+                ease: "back.out",
+            });
         } else {
             this.container.scale.set(1);
         }
@@ -67,7 +87,12 @@ export class Cauldron extends Container {
     public async hide(animated = true) {
         gsap.killTweensOf(this.container.scale);
         if (animated) {
-            await gsap.to(this.container.scale, { x: 0, y: 0, duration: 0.3, ease: 'back.in' });
+            await gsap.to(this.container.scale, {
+                x: 0,
+                y: 0,
+                duration: 0.3,
+                ease: "back.in",
+            });
         } else {
             this.container.scale.set(0);
         }
@@ -97,7 +122,7 @@ export class Cauldron extends Container {
                 y: randomRange(30, 70),
             },
             randomRange(0.03, 0.07),
-            duration,
+            duration
         );
         this.removeChild(drop);
         pool.giveBack(drop);
@@ -108,8 +133,18 @@ export class Cauldron extends Container {
         gsap.killTweensOf(this.spine.scale);
         const scaleX = randomRange(1.1, 1.2);
         const scaley = randomRange(0.8, 0.9);
-        await gsap.to(this.spine.scale, { x: scaleX, y: scaley, duration: 0.05, ease: 'linear' });
-        await gsap.to(this.spine.scale, { x: 1, y: 1, duration: 0.8, ease: 'elastic.out' });
+        await gsap.to(this.spine.scale, {
+            x: scaleX,
+            y: scaley,
+            duration: 0.05,
+            ease: "linear",
+        });
+        await gsap.to(this.spine.scale, {
+            x: 1,
+            y: 1,
+            duration: 0.8,
+            ease: "elastic.out",
+        });
     }
 
     /** Add a sprite to the front of the cauldron that will follow up the spine animation */
@@ -133,19 +168,33 @@ export class Cauldron extends Container {
 class CauldronCircle extends Sprite {
     constructor() {
         super();
-        this.texture = Texture.from('circle');
+        this.texture = Texture.from("circle");
         this.anchor.set(0.5);
         this.tint = 0x2c136c;
     }
 
-    public async playSplashDrop(to: { x: number; y: number }, scale: number, duration: number) {
+    public async playSplashDrop(
+        to: { x: number; y: number },
+        scale: number,
+        duration: number
+    ) {
         gsap.killTweensOf(this);
         gsap.killTweensOf(this.scale);
         this.scale.set(scale);
         this.alpha = 1;
-        gsap.to(this.scale, { x: scale * 3, y: scale * 3, duration, ease: 'linear' });
-        gsap.to(this, { alpha: 0, duration: 0.1, ease: 'linear', delay: duration - 0.1 });
-        gsap.to(this, { x: to.x, duration, ease: 'linear' });
+        gsap.to(this.scale, {
+            x: scale * 3,
+            y: scale * 3,
+            duration,
+            ease: "linear",
+        });
+        gsap.to(this, {
+            alpha: 0,
+            duration: 0.1,
+            ease: "linear",
+            delay: duration - 0.1,
+        });
+        gsap.to(this, { x: to.x, duration, ease: "linear" });
         await gsap.to(this, { y: to.y, duration, ease: easeDropJumpOut });
     }
 }

@@ -3,7 +3,7 @@ import { i18n } from "../utils/i18n";
 import { Label } from "./Label";
 import gsap from "gsap";
 
-import { sfx } from "../utils/audio";
+// import { sfx } from "../utils/audio";
 
 /**
  * Shows up when the game is 5 seconds to finish, with a countdown 5 to 1,
@@ -50,7 +50,7 @@ export class GameOvertime extends Container {
         const str = String(num);
         if (this.labelNum.text === str) return;
 
-        sfx.play("common/sfx-countdown.wav", { speed: 2, volume: 0.5 });
+        // sfx.play("sfx-countdown.wav", { speed: 2, volume: 0.5 });
         this.stroke.texture = Texture.from("num-stroke-" + str);
         this.labelNum.text = str;
 
@@ -100,7 +100,7 @@ export class GameOvertime extends Container {
         this.stroke.visible = false;
 
         if (!this.labelOver.visible) {
-            sfx.play("common/sfx-countdown.wav", { speed: 0.5, volume: 0.5 });
+            // sfx.play("sfx-countdown.wav", { speed: 0.5, volume: 0.5 });
             gsap.killTweensOf(this.labelOver);
             gsap.killTweensOf(this.labelOver.scale);
             this.labelOver.visible = true;

@@ -1,13 +1,15 @@
-import { BlurFilter, Container, Sprite, Texture } from 'pixi.js';
-import { Label } from '../ui/Label';
-import { LargeButton } from '../ui/LargeButton';
-import { RoundedBox } from '../ui/RoundedBox';
-import { i18n } from '../utils/i18n';
-import gsap from 'gsap';
-import { navigation } from '../utils/navigation';
+import { Application, BlurFilter, Container, Sprite, Texture } from "pixi.js";
+import { Label } from "../ui/Label";
+import { LargeButton } from "../ui/LargeButton";
+import { RoundedBox } from "../ui/RoundedBox";
+import { i18n } from "../utils/i18n";
+import gsap from "gsap";
+import { getNavigation, Navigation } from "../utils/navigation";
 
 /** Popup that shows up when gameplay is paused */
 export class PausePopup extends Container {
+    public app: Application;
+
     /** The dark semi-transparent background covering current screen */
     private bg: Sprite;
     /** Container for the popup UI components */
@@ -19,9 +21,11 @@ export class PausePopup extends Container {
     /** The panel background */
     private panelBase: RoundedBox;
 
-    constructor() {
+    constructor(app: Application) {
         super();
 
+        this.app = app;
+        const navigation = getNavigation();
         this.bg = new Sprite(Texture.WHITE);
         this.bg.tint = 0x0a0025;
         this.bg.interactive = true;
@@ -33,7 +37,10 @@ export class PausePopup extends Container {
         this.panelBase = new RoundedBox({ height: 300 });
         this.panel.addChild(this.panelBase);
 
-        this.title = new Label(i18n.pauseTitle, { fill: 0xffd579, fontSize: 50 });
+        this.title = new Label(i18n.pauseTitle, {
+            fill: 0xffd579,
+            fontSize: 50,
+        });
         this.title.y = -80;
         this.panel.addChild(this.title);
 
@@ -53,6 +60,7 @@ export class PausePopup extends Container {
 
     /** Present the popup, animated */
     public async show() {
+        const navigation = getNavigation();
         if (navigation.currentScreen) {
             navigation.currentScreen.filters = [new BlurFilter(5)];
         }
@@ -60,18 +68,27 @@ export class PausePopup extends Container {
         gsap.killTweensOf(this.panel.pivot);
         this.bg.alpha = 0;
         this.panel.pivot.y = -400;
-        gsap.to(this.bg, { alpha: 0.8, duration: 0.2, ease: 'linear' });
-        await gsap.to(this.panel.pivot, { y: 0, duration: 0.3, ease: 'back.out' });
+        gsap.to(this.bg, { alpha: 0.8, duration: 0.2, ease: "linear" });
+        await gsap.to(this.panel.pivot, {
+            y: 0,
+            duration: 0.3,
+            ease: "back.out",
+        });
     }
 
     /** Dismiss the popup, animated */
     public async hide() {
+        const navigation = getNavigation();
         if (navigation.currentScreen) {
             navigation.currentScreen.filters = [];
         }
         gsap.killTweensOf(this.bg);
         gsap.killTweensOf(this.panel.pivot);
-        gsap.to(this.bg, { alpha: 0, duration: 0.2, ease: 'linear' });
-        await gsap.to(this.panel.pivot, { y: -500, duration: 0.3, ease: 'back.in' });
+        gsap.to(this.bg, { alpha: 0, duration: 0.2, ease: "linear" });
+        await gsap.to(this.panel.pivot, {
+            y: -500,
+            duration: 0.3,
+            ease: "back.in",
+        });
     }
 }

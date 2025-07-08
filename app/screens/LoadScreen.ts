@@ -13,7 +13,7 @@ export class LoadScreen extends Container {
     /** Assets bundles required by this screen */
     public static assetBundles = ["preload"];
     /** ANimated cauldron */
-    private cauldron: Cauldron;
+    // private cauldron: Cauldron;
     /** The PixiJS logo */
     private pixiLogo: PixiLogo;
     /** The cloud animation at the top */
@@ -25,8 +25,8 @@ export class LoadScreen extends Container {
         super();
 
         this.app = app;
-        this.cauldron = new Cauldron();
-        this.addChild(this.cauldron);
+        // this.cauldron = new Cauldron();
+        // this.addChild(this.cauldron);
 
         this.message = new Text({
             text: i18n.loadingMessage,
@@ -49,8 +49,8 @@ export class LoadScreen extends Container {
 
     /** Resize the screen, fired whenever window size changes  */
     public resize(width: number, height: number) {
-        this.cauldron.x = width * 0.5;
-        this.cauldron.y = height * 0.5;
+        // this.cauldron.x = width * 0.5;
+        // this.cauldron.y = height * 0.5;
         this.message.x = width * 0.5;
         this.message.y = height * 0.75;
         this.pixiLogo.x = width * 0.5;

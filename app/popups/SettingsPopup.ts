@@ -6,7 +6,7 @@ import { LargeButton } from "../ui/LargeButton";
 import { RoundedBox } from "../ui/RoundedBox";
 import { i18n } from "../utils/i18n";
 import gsap from "gsap";
-import { navigation } from "../utils/navigation";
+import { getNavigation } from "../utils/navigation";
 import { getUserSettings } from "../utils/userSettings";
 import { List } from "@pixi/ui";
 import { VolumeSlider } from "../ui/VolumeSlider";
@@ -40,7 +40,7 @@ export class SettingsPopup extends Container {
 
     constructor() {
         super();
-
+        const navigation = getNavigation();
         this.bg = new Sprite(Texture.WHITE);
         this.bg.tint = 0x0a0025;
         this.bg.interactive = true;
@@ -117,7 +117,9 @@ export class SettingsPopup extends Container {
 
     /** Set things up just before showing the popup */
     public prepare() {
-        // Game mode switcher should be disabled during gameplay
+        const navigation = getNavigation();
+        // Game mode switcher should be disabled duri
+        // ng gameplay
         const canChangeMode = !(navigation.currentScreen instanceof GameScreen);
         this.mode.alpha = canChangeMode ? 1 : 0.3;
         this.mode.interactiveChildren = canChangeMode;
@@ -130,6 +132,7 @@ export class SettingsPopup extends Container {
 
     /** Present the popup, animated */
     public async show() {
+        const navigation = getNavigation();
         if (navigation.currentScreen) {
             navigation.currentScreen.filters = [
                 new BlurFilter({ strength: 4 }),
@@ -149,6 +152,7 @@ export class SettingsPopup extends Container {
 
     /** Dismiss the popup, animated */
     public async hide() {
+        const navigation = getNavigation();
         if (navigation.currentScreen) {
             navigation.currentScreen.filters = [];
         }

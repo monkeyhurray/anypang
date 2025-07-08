@@ -1,5 +1,9 @@
 import { Match3Mode, match3ValidModes } from "../match3/Match3Config";
-import { bgm, setMasterVolume, sfx } from "./audio";
+import {
+    bgm,
+    setMasterVolume,
+    // sfx
+} from "./audio";
 import { storage } from "./storage";
 
 // Keys for saved items in storage
@@ -15,7 +19,7 @@ class UserSettings {
     constructor() {
         setMasterVolume(this.getMasterVolume());
         bgm.setVolume(this.getBgmVolume());
-        sfx.setVolume(this.getSfxVolume());
+        // sfx.setVolume(this.getSfxVolume());
     }
 
     /** Get current game mode */
@@ -64,7 +68,7 @@ class UserSettings {
 
     /** Set sound effects volume */
     public setSfxVolume(value: number) {
-        sfx.setVolume(value);
+        // sfx.setVolume(value);
         storage.setNumber(KEY_VOLUME_SFX, value);
     }
 }

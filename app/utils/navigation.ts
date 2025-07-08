@@ -1,8 +1,7 @@
-import { Container, Ticker } from "pixi.js";
+import { Application, Container, Ticker } from "pixi.js";
 import { areBundlesLoaded, loadBundles } from "./assets";
 
 import { pool } from "./pool";
-import { createPixiPangApp } from "../libs/pixi-pang/createPixiPangApp";
 
 /** Interface for app screens */
 interface AppScreen extends Container {
@@ -34,7 +33,8 @@ interface AppScreenConstructor<T = any> {
     assetBundles?: string[];
 }
 
-class Navigation {
+export class Navigation {
+    public app: Application;
     /** Container for screens */
     public container = new Container();
 
@@ -53,6 +53,10 @@ class Navigation {
     /** Current popup being displayed */
     public currentPopup?: AppScreen;
 
+    constructor(app: Application) {
+        this.app = app;
+    }
+
     /** Set the  default load screen */
     public setBackground(ctor: AppScreenConstructor) {
         this.background = new ctor();
@@ -62,9 +66,9 @@ class Navigation {
     /** Add screen to the stage, link update & resize functions */
     private async addAndShowScreen(screen: AppScreen) {
         // Add navigation container to stage if it does not have a parent yet
-        const app = await createPixiPangApp();
+
         if (!this.container.parent) {
-            app.stage.addChild(this.container);
+            this.app.stage.addChild(this.container);
         }
 
         // Add screen to stage
@@ -83,7 +87,7 @@ class Navigation {
 
         // Add update function if available
         if (screen.update) {
-            app.ticker.add(screen.update, screen);
+            this.app.ticker.add(screen.update, screen);
         }
 
         // Show the new screen
@@ -98,7 +102,7 @@ class Navigation {
     private async hideAndRemoveScreen(screen: AppScreen) {
         // Prevent interaction in the screen
         screen.interactiveChildren = false;
-        const app = await createPixiPangApp();
+
         // Hide screen if method is available
         if (screen.hide) {
             await screen.hide();
@@ -106,7 +110,7 @@ class Navigation {
 
         // Unlink update function if method is available
         if (screen.update) {
-            app.ticker.remove(screen.update, screen);
+            this.app.ticker.remove(screen.update, screen);
         }
 
         // Remove screen from its parent (usually app.stage, if not changed)
@@ -206,4 +210,21 @@ class Navigation {
 }
 
 /** Shared navigation instance */
-export const navigation = new Navigation();
+// export const navigation = new Navigation(this.app);
+
+let navigation: Navigation;
+
+export function initNavigation(app: Application) {
+    if (navigation) {
+        console.warn("Navigation already initialized");
+        return;
+    }
+    navigation = new Navigation(app);
+}
+
+export function getNavigation(): Navigation {
+    if (!navigation) {
+        throw new Error("Navigation has not been initialized");
+    }
+    return navigation;
+}

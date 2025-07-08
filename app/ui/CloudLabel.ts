@@ -1,7 +1,7 @@
-import { Container } from 'pixi.js';
-import { Label } from './Label';
-import { Cloud } from './Cloud';
-import gsap from 'gsap';
+import { Container } from "pixi.js";
+import { Label } from "./Label";
+import { Cloud } from "./Cloud";
+import gsap from "gsap";
 
 const defaultCloudLabelOptions = {
     color: 0x2c136c,
@@ -17,7 +17,7 @@ export class CloudLabel extends Container {
     /** Inner container for components, for animation purposes */
     private container: Container;
     /** The animated cloud background */
-    private cloud: Cloud;
+    // private cloud: Cloud;
     /** The message label */
     private messageLabel: Label;
     /** Turns false if component is hidden */
@@ -30,15 +30,15 @@ export class CloudLabel extends Container {
         this.container = new Container();
         this.addChild(this.container);
 
-        this.cloud = new Cloud({
-            color: opts.color,
-            width: 120,
-            height: 10,
-            circleSize: 30,
-        });
-        this.container.addChild(this.cloud);
+        // this.cloud = new Cloud({
+        //     color: opts.color,
+        //     width: 120,
+        //     height: 10,
+        //     circleSize: 30,
+        // });
+        // this.container.addChild(this.cloud);
 
-        this.messageLabel = new Label('', {
+        this.messageLabel = new Label("", {
             fill: opts.labelColor,
             fontSize: 18,
         });
@@ -63,13 +63,27 @@ export class CloudLabel extends Container {
         this.killTweens();
         if (animated) {
             const duration = 1;
-            this.cloud.playFormAnimation(duration * 0.5);
+            // this.cloud.playFormAnimation(duration * 0.5);
             this.container.alpha = 0;
             this.messageLabel.scale.set(3);
             this.container.scale.set(0.5);
-            gsap.to(this.container, { alpha: 1, duration: duration * 0.5, ease: 'linear' });
-            gsap.to(this.messageLabel.scale, { x: 1, y: 1, duration, ease: 'expo.out' });
-            await gsap.to(this.container.scale, { x: 1, y: 1, duration, ease: 'expo.out' });
+            gsap.to(this.container, {
+                alpha: 1,
+                duration: duration * 0.5,
+                ease: "linear",
+            });
+            gsap.to(this.messageLabel.scale, {
+                x: 1,
+                y: 1,
+                duration,
+                ease: "expo.out",
+            });
+            await gsap.to(this.container.scale, {
+                x: 1,
+                y: 1,
+                duration,
+                ease: "expo.out",
+            });
         } else {
             this.container.alpha = 1;
             this.messageLabel.alpha = 1;
@@ -83,8 +97,12 @@ export class CloudLabel extends Container {
         this.showing = false;
         this.killTweens();
         if (animated) {
-            this.cloud.playDismissAnimation(0.3);
-            await gsap.to(this.container, { alpha: 0, duration: 0.3, ease: 'linear' });
+            // this.cloud.playDismissAnimation(0.3);
+            await gsap.to(this.container, {
+                alpha: 0,
+                duration: 0.3,
+                ease: "linear",
+            });
         }
         this.visible = false;
     }

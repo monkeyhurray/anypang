@@ -1,9 +1,9 @@
-import { Container } from 'pixi.js';
-import { Cloud } from './Cloud';
-import { Label } from './Label';
-import gsap from 'gsap';
-import { throttle } from '../utils/throttle';
-import { sfx } from '../utils/audio';
+import { Container } from "pixi.js";
+import { Cloud } from "./Cloud";
+import { Label } from "./Label";
+import gsap from "gsap";
+import { throttle } from "../utils/throttle";
+import { sfx } from "../utils/audio";
 
 /**
  * The game score that shows during gameplay, with points animation
@@ -12,7 +12,7 @@ export class GameScore extends Container {
     /** Inner container for animation */
     private container: Container;
     /** The animated cloud background */
-    private cloud: Cloud;
+    // private cloud: Cloud;
     /** The score number displayed */
     private messageLabel: Label;
     /** Score currently set */
@@ -30,15 +30,15 @@ export class GameScore extends Container {
         this.container = new Container();
         this.addChild(this.container);
 
-        this.cloud = new Cloud({
-            color: 0x2c136c,
-            width: 200,
-            height: 20,
-            circleSize: 50,
-        });
-        this.container.addChild(this.cloud);
+        // this.cloud = new Cloud({
+        //     color: 0x2c136c,
+        //     width: 200,
+        //     height: 20,
+        //     circleSize: 50,
+        // });
+        // this.container.addChild(this.cloud);
 
-        this.messageLabel = new Label('0', { fill: 0xffffff, fontSize: 30 });
+        this.messageLabel = new Label("0", { fill: 0xffffff, fontSize: 30 });
         this.messageLabel.y = 8;
         this.container.addChild(this.messageLabel);
         this.points = 0;
@@ -47,7 +47,7 @@ export class GameScore extends Container {
     /** Reset score to 0 */
     public reset() {
         this.points = 0;
-        this.messageLabel.text = '0';
+        this.messageLabel.text = "0";
     }
 
     /** Set the score and play the points animation */
@@ -65,7 +65,12 @@ export class GameScore extends Container {
         this.visible = true;
         if (animated) {
             this.container.scale.set(0);
-            await gsap.to(this.container.scale, { x: 1, y: 1, duration: 0.3, ease: 'back.out' });
+            await gsap.to(this.container.scale, {
+                x: 1,
+                y: 1,
+                duration: 0.3,
+                ease: "back.out",
+            });
         } else {
             this.container.scale.set(1);
         }
@@ -77,7 +82,12 @@ export class GameScore extends Container {
         this.showing = false;
         gsap.killTweensOf(this.container.scale);
         if (animated) {
-            await gsap.to(this.container.scale, { x: 0, y: 0, duration: 0.3, ease: 'back.in' });
+            await gsap.to(this.container.scale, {
+                x: 0,
+                y: 0,
+                duration: 0.3,
+                ease: "back.in",
+            });
         }
         this.visible = false;
     }
@@ -90,7 +100,7 @@ export class GameScore extends Container {
             intensity: this.intensity + diff,
             animatedPoints: this.points,
             duration: Math.min(diff * 0.025, 2),
-            ease: 'linear',
+            ease: "linear",
             onUpdate: () => {
                 this.printPoints();
             },
@@ -98,7 +108,7 @@ export class GameScore extends Container {
         gsap.to(this, {
             intensity: 1,
             duration: 1.5,
-            ease: 'expo.in',
+            ease: "expo.in",
         });
     }
 
@@ -111,8 +121,8 @@ export class GameScore extends Container {
             const speed = Math.min(0.8 + this.intensity * 0.001, 2);
             // Throttle sfx to a minimum interval, otherwise too many sounds instances
             // will be played at the same time, making it very noisy
-            throttle('score', 100, () => {
-                sfx.play('common/sfx-points.wav', { speed, volume: 0.2 });
+            throttle("score", 100, () => {
+                // sfx.play("sfx-points.wav", { speed, volume: 0.2 });
             });
         }
     }

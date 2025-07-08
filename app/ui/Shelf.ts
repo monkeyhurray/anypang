@@ -1,4 +1,4 @@
-import { Container, Sprite } from 'pixi.js';
+import { Container, Sprite } from "pixi.js";
 
 /**
  * The book shelf during gameplay, as background for match3 pieces. This can be dinamically
@@ -35,7 +35,7 @@ export class Shelf extends Container {
         // Build shelf inner blocks
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < columns; c++) {
-                const block = Sprite.from('shelf-block');
+                const block = Sprite.from("shelf-block");
                 const x = c * tileSize - offsetX;
                 const y = r * tileSize - offsetY;
                 block.anchor.set(0.5);
@@ -50,7 +50,8 @@ export class Shelf extends Container {
         // Build left side with corners and fill up with books
         for (let r = 0; r < rows; r++) {
             const c = -1;
-            const texture = r === 0 || r === rows - 1 ? 'shelf-corner' : 'shelf-block';
+            const texture =
+                r === 0 || r === rows - 1 ? "shelf-corner" : "shelf-block";
             const block = Sprite.from(texture);
             const x = c * tileSize - offsetX;
             const y = r * tileSize - offsetY;
@@ -74,7 +75,8 @@ export class Shelf extends Container {
         // Build right side with corners and fill up with books
         for (let r = 0; r < rows; r++) {
             const c = columns;
-            const texture = r === 0 || r === rows - 1 ? 'shelf-corner' : 'shelf-block';
+            const texture =
+                r === 0 || r === rows - 1 ? "shelf-corner" : "shelf-block";
             const block = Sprite.from(texture);
             const x = c * tileSize - offsetX;
             const y = r * tileSize - offsetY;
@@ -102,7 +104,8 @@ export class Shelf extends Container {
         // Build bottom line as shadow
         for (let c = -1; c <= columns; c++) {
             const r = rows - 1;
-            const texture = c === -1 || c === columns ? 'shelf-corner' : 'shelf-block';
+            const texture =
+                c === -1 || c === columns ? "shelf-corner" : "shelf-block";
             const block = Sprite.from(texture);
             const x = c * tileSize - offsetX;
             const y = r * tileSize - offsetY;
@@ -131,7 +134,13 @@ export class Shelf extends Container {
 
     /** Helper function for creating a book sprite */
     private getBooks(index: number) {
-        const list = ['books-01', 'books-02', 'books-03', 'books-04', 'books-05'];
+        const list = [
+            "books-01",
+            "books-02",
+            "books-03",
+            "books-04",
+            "books-05",
+        ];
         const name = list[index % list.length];
         const books = Sprite.from(name);
         books.anchor.set(0.5);

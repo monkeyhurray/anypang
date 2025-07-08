@@ -1,11 +1,11 @@
-import { FancyButton } from '@pixi/ui';
-import { NineSliceSprite, Texture } from 'pixi.js';
-import { Label } from './Label';
-import gsap from 'gsap';
-import { sfx } from '../utils/audio';
+import { FancyButton } from "@pixi/ui";
+import { NineSliceSprite, Texture } from "pixi.js";
+import { Label } from "./Label";
+import gsap from "gsap";
+// import { sfx } from '../utils/audio';
 
 const defaultLargeButtonOptions = {
-    text: '',
+    text: "",
     width: 301,
     height: 112,
 };
@@ -23,7 +23,7 @@ export class LargeButton extends FancyButton {
         const opts = { ...defaultLargeButtonOptions, ...options };
 
         const defaultView = new NineSliceSprite({
-            texture: Texture.from('button-large'),
+            texture: Texture.from("button-large"),
             leftWidth: 36,
             topHeight: 42,
             rightWidth: 36,
@@ -33,7 +33,7 @@ export class LargeButton extends FancyButton {
         });
 
         const hoverView = new NineSliceSprite({
-            texture: Texture.from('button-large-hover'),
+            texture: Texture.from("button-large-hover"),
             leftWidth: 36,
             topHeight: 42,
             rightWidth: 36,
@@ -43,7 +43,7 @@ export class LargeButton extends FancyButton {
         });
 
         const pressedView = new NineSliceSprite({
-            texture: Texture.from('button-large-press'),
+            texture: Texture.from("button-large-press"),
             leftWidth: 36,
             topHeight: 42,
             rightWidth: 36,
@@ -61,7 +61,7 @@ export class LargeButton extends FancyButton {
 
         this.messageLabel = new Label(opts.text, {
             fill: 0x4a4a4a,
-            align: 'center',
+            align: "center",
         });
         this.messageLabel.y = -13;
         this.addChild(this.messageLabel);
@@ -69,16 +69,16 @@ export class LargeButton extends FancyButton {
         this.onDown.connect(this.handleDown.bind(this));
         this.onUp.connect(this.handleUp.bind(this));
         this.onHover.connect(this.handleHover.bind(this));
-        this.on('pointerupoutside', this.handleUp.bind(this));
-        this.on('pointerout', this.handleUp.bind(this));
+        this.on("pointerupoutside", this.handleUp.bind(this));
+        this.on("pointerout", this.handleUp.bind(this));
     }
 
     private handleHover() {
-        sfx.play('common/sfx-hover.wav');
+        // sfx.play("sfx-hover.wav");
     }
 
     private handleDown() {
-        sfx.play('common/sfx-press.wav');
+        // sfx.play("sfx-press.wav");
         this.messageLabel.y = -5;
     }
 
@@ -92,7 +92,11 @@ export class LargeButton extends FancyButton {
         this.visible = true;
         if (animated) {
             this.pivot.y = -200;
-            await gsap.to(this.pivot, { y: 0, duration: 0.5, ease: 'back.out' });
+            await gsap.to(this.pivot, {
+                y: 0,
+                duration: 0.5,
+                ease: "back.out",
+            });
         } else {
             this.pivot.y = 0;
         }
@@ -104,7 +108,11 @@ export class LargeButton extends FancyButton {
         this.interactiveChildren = false;
         gsap.killTweensOf(this.pivot);
         if (animated) {
-            await gsap.to(this.pivot, { y: -200, duration: 0.3, ease: 'back.in' });
+            await gsap.to(this.pivot, {
+                y: -200,
+                duration: 0.3,
+                ease: "back.in",
+            });
         } else {
             this.pivot.y = -200;
         }

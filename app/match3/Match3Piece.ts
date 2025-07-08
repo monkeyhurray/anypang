@@ -95,11 +95,6 @@ export class Match3Piece extends Container {
      * @param options The setup options
      */
 
-    public async setApp(app: Application) {
-        this.app = app;
-        this.onRender = () => this.update();
-    }
-
     public setup(options: Partial<Match3PieceOptions> = {}) {
         const opts = { ...defaultMatch3PieceOptions, ...options };
         this.killTweens();

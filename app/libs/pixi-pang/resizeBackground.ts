@@ -1,13 +1,13 @@
 import { Application } from "pixi.js";
 
-import { navigation } from "@/app/utils/navigation";
+import { getNavigation, Navigation } from "@/app/utils/navigation";
 
 const resize = (app: Application) => {
+    const navigation = getNavigation();
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
     const minWidth = 375;
     const minHeight = 700;
-
     // Calculate renderer and canvas sizes based on current dimensions
     const scaleX = windowWidth < minWidth ? minWidth / windowWidth : 1;
     const scaleY = windowHeight < minHeight ? minHeight / windowHeight : 1;

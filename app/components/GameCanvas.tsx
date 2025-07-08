@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createPixiPangApp } from "../libs/pixi-pang/createPixiPangApp";
-import { Application, Container } from "pixi.js";
+import { Application, Container, extensions, Sprite } from "pixi.js";
 import { Assets } from "pixi.js";
 import { TiledBackground } from "@/app/ui/TiledBackground";
-import { navigation } from "@/app/utils/navigation";
+import { initNavigation, getNavigation } from "@/app/utils/navigation";
+
 import resize from "../libs/pixi-pang/resizeBackground";
 import { getUrlParam } from "../utils/getUrlParams";
 import { GameScreen } from "../screens/GameScreen";
@@ -13,60 +14,72 @@ import { LoadScreen } from "../screens/LoadScreen";
 import { ResultScreen } from "../screens/ResultScreen";
 import { HomeScreen } from "../screens/HomeScreen";
 import { loadAssetManifest } from "../utils/manifest";
-import manifest from "../../public/assets/assets-manifest.json";
-import { loadGameAssets } from "../libs/loadAssets";
+import { manifest } from "../../assets-manifest";
 
 const GameCanvas = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const appRef = useRef<Application | null>(null);
-    const [progress, setProgress] = useState(0);
 
     useEffect(() => {
         let cleanup: (() => void) | undefined;
 
         const initPixi = async () => {
-            // await loadAssetManifest();
-            await loadGameAssets((p) => setProgress(p));
+            await Assets.init({ manifest });
+
             const app = await createPixiPangApp();
             appRef.current = app;
+            initNavigation(app);
 
+            const navigation = getNavigation();
             if (containerRef.current) {
                 containerRef.current.appendChild(app.canvas);
             }
-            const container = new Container();
-            const mapContainer = new Container();
-
-            const bg = new TiledBackground();
-            await bg.init(app);
-
-            navigation.resize(app.screen.width, app.screen.height);
 
             const handleResize = () => {
-                if (appRef.current) {
-                    resize(appRef.current);
-                }
+                if (appRef.current) resize(app);
             };
-
             window.addEventListener("resize", handleResize);
             handleResize();
 
-            if (getUrlParam("game") !== null) {
-                await navigation.showScreen(GameScreen);
-            } else if (getUrlParam("load") !== null) {
-                await navigation.showScreen(LoadScreen);
-            } else if (getUrlParam("result") !== null) {
-                await navigation.showScreen(ResultScreen);
-            } else {
-                await navigation.showScreen(HomeScreen);
+            // 5. 화면 전환 시 사용할 배경 설정
+
+            const bg = new TiledBackground(app);
+            await bg.init();
+            // navigation.setBackground(TiledBackground);
+            app.stage.addChild(bg);
+            // app.ticker.add(() => bg.update(app.ticker));
+
+            // 6. 에셋 번들 로딩
+            try {
+                await Assets.loadBundle("common");
+                await Assets.loadBundle("game");
+                await Assets.loadBundle("preload");
+            } catch (e) {
+                console.error("❌ 번들 로딩 에러:", e);
             }
 
+            // 7. URL 파라미터에 따른 초기 화면 전환
+            await navigation.showScreen(GameScreen, app);
+
+            // if (getUrlParam("game") !== null) {
+            // } else if (getUrlParam("load") !== null) {
+            //     await navigation.showScreen(LoadScreen, app);
+            // } else if (getUrlParam("result") !== null) {
+            //     await navigation.showScreen(ResultScreen, app);
+            // } else {
+            //     await navigation.showScreen(HomeScreen, app);
+            // }
+
+            // 8. 정리 함수 등록
             cleanup = () => {
                 console.log("cleanup called");
+                window.removeEventListener("resize", handleResize);
             };
         };
 
         initPixi();
 
+        // 9. 언마운트 시 정리
         return () => {
             cleanup?.();
             if (appRef.current) {
@@ -75,7 +88,6 @@ const GameCanvas = () => {
             }
         };
     }, []);
-
     return <div ref={containerRef} id="game-container" />;
 };
 

@@ -12,12 +12,15 @@ import { ResultStars } from "../ui/ResultStars";
 import { Dragon } from "../ui/Dragon";
 import { LargeButton } from "../ui/LargeButton";
 import { GameScreen } from "./GameScreen";
-import { navigation } from "../utils/navigation";
+import { getNavigation } from "../utils/navigation";
 import { CloudLabel } from "../ui/CloudLabel";
 import { ResultScore } from "../ui/ResultScore";
 import { RippleButton } from "../ui/RippleButton";
 import { SettingsPopup } from "../popups/SettingsPopup";
-import { bgm, sfx } from "../utils/audio";
+import {
+    bgm,
+    // sfx
+} from "../utils/audio";
 import { getUserSettings } from "../utils/userSettings";
 import { waitFor } from "../utils/asyncUtils";
 import { MaskTransition } from "../ui/MaskTransition";
@@ -59,7 +62,7 @@ export class ResultScreen extends Container {
 
     constructor(public app: Application) {
         super();
-
+        const navigation = getNavigation();
         this.settingsButton = new RippleButton({
             image: "icon-settings",
             ripple: "icon-settings-stroke",
@@ -132,7 +135,7 @@ export class ResultScreen extends Container {
             navigation.showScreen(GameScreen)
         );
 
-        this.maskTransition = new MaskTransition();
+        this.maskTransition = new MaskTransition(app);
     }
 
     /** Prepare the screen just before showing */
@@ -321,11 +324,11 @@ export class ResultScreen extends Container {
         const messages = i18n as Record<string, string>;
         const message = "grade" + grade;
         this.message.text = messages[message];
-        if (grade < 1) {
-            sfx.play("common/sfx-incorrect.wav");
-        } else {
-            sfx.play("common/sfx-special.wav");
-        }
+        // if (grade < 1) {
+        //     sfx.play("sfx-incorrect");
+        // } else {
+        //     sfx.play("sfx-special");
+        // }
         await this.message.show();
     }
 }
