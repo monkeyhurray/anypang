@@ -1,10 +1,10 @@
-import { FancyButton } from '@pixi/ui';
-import { Sprite } from 'pixi.js';
-import gsap from 'gsap';
-import { sfx } from '../utils/audio';
+import { FancyButton } from "@pixi/ui";
+import { Sprite } from "pixi.js";
+import gsap from "gsap";
+import { sfx } from "../utils/audio";
 
 const defaultImageButtonOptions = {
-    image: '',
+    image: "",
     scaleOverride: 1,
 };
 
@@ -36,20 +36,20 @@ export class ImageButton extends FancyButton {
         this.onOut.connect(this.handleOut.bind(this));
         this.onDown.connect(this.handleDown.bind(this));
         this.onUp.connect(this.handleUp.bind(this));
-        this.on('pointerupoutside', this.handleUp.bind(this));
+        this.on("pointerupoutside", this.handleUp.bind(this));
     }
 
     private handleHover() {
-        sfx.play('common/sfx-hover.wav');
-        this.image.blendMode = 'add';
+        sfx.play("sfx-hover.wav");
+        this.image.blendMode = "add";
     }
 
     private handleOut() {
-        this.image.blendMode = 'normal';
+        this.image.blendMode = "normal";
     }
 
     private handleDown() {
-        sfx.play('common/sfx-press.wav');
+        sfx.play("sfx-press.wav");
         this.image.alpha = 0.5;
     }
 
@@ -67,7 +67,7 @@ export class ImageButton extends FancyButton {
                 x: this.scaleOverride,
                 y: this.scaleOverride,
                 duration: 0.3,
-                ease: 'back.out',
+                ease: "back.out",
             });
         } else {
             this.scale.set(this.scaleOverride);
@@ -78,7 +78,12 @@ export class ImageButton extends FancyButton {
     public async hide(animated = true) {
         gsap.killTweensOf(this.scale);
         if (animated) {
-            await gsap.to(this.scale, { x: 0.5, y: 0.5, duration: 0.3, ease: 'back.in' });
+            await gsap.to(this.scale, {
+                x: 0.5,
+                y: 0.5,
+                duration: 0.3,
+                ease: "back.in",
+            });
         } else {
             this.scale.set(0);
         }

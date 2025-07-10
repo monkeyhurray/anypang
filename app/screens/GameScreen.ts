@@ -10,7 +10,7 @@ import {
 import { Shelf } from "../ui/Shelf";
 import { getUrlParam, getUrlParamNumber } from "../utils/getUrlParams";
 import { GameTimer } from "../ui/GameTimer";
-import { getNavigation, Navigation } from "../utils/navigation";
+import { getNavigation } from "../utils/navigation";
 import { ResultScreen } from "./ResultScreen";
 import { GameScore } from "../ui/GameScore";
 import { CloudLabel } from "../ui/CloudLabel";
@@ -34,11 +34,11 @@ import { userStats } from "../utils/userStats";
 export class GameScreen extends Container {
     public app: Application;
     /** Assets bundles required by this screen */
-    public static assetBundles = ["game", "common"];
+    // public static assetBundles = ["game", "common"];
     /** The Math3 game */
     public readonly match3: Match3;
     /** Animated cauldron */
-    // public readonly cauldron: Cauldron;
+    public readonly cauldron: Cauldron;
     /** Inner container for the match3 */
     public readonly gameContainer: Container;
     /** The gameplay timer display */
@@ -103,41 +103,47 @@ export class GameScreen extends Container {
         this.match3.onTimesUp = this.onTimesUp.bind(this);
         this.gameContainer.addChild(this.match3);
 
-        this.score = new GameScore();
+        this.score = new GameScore(this.app);
         this.addChild(this.score);
 
-        this.comboMessage = new CloudLabel({
-            color: 0x2c136c,
-            labelColor: 0xffffff,
-        });
+        this.comboMessage = new CloudLabel(
+            {
+                color: 0x2c136c,
+                labelColor: 0xffffff,
+            },
+            this.app
+        );
         this.comboMessage.text = i18n.comboMessage;
         this.comboMessage.hide(false);
         this.addChild(this.comboMessage);
 
-        this.comboLevel = new CloudLabel({
-            color: 0x2c136c,
-            labelColor: 0xffffff,
-        });
+        this.comboLevel = new CloudLabel(
+            {
+                color: 0x2c136c,
+                labelColor: 0xffffff,
+            },
+            this.app
+        );
         this.comboLevel.text = "x8";
         this.comboLevel.hide(false);
         this.addChild(this.comboLevel);
 
-        // this.cauldron = new Cauldron(true);
-        // this.addChild(this.cauldron);
+        this.cauldron = new Cauldron(true);
+        this.addChild(this.cauldron);
 
         this.timer = new GameTimer();
-        // this.cauldron.addContent(this.timer);
+        this.cauldron.addContent(this.timer);
 
         this.vfx = new GameEffects(this);
         this.addChild(this.vfx);
 
-        this.countdown = new GameCountdown();
+        this.countdown = new GameCountdown(this.app);
         this.addChild(this.countdown);
 
         this.overtime = new GameOvertime(this.app);
         this.addChild(this.overtime);
 
-        this.timesUp = new GameTimesUp();
+        this.timesUp = new GameTimesUp(this.app);
         this.addChild(this.timesUp);
     }
 
@@ -158,7 +164,7 @@ export class GameScreen extends Container {
         this.shelf?.setup(match3Config);
         this.match3.setup(match3Config);
         this.pauseButton.hide(false);
-        // this.cauldron.hide(false);
+        this.cauldron.hide(false);
         this.score.hide(false);
         gsap.killTweensOf(this.gameContainer.pivot);
         this.gameContainer.pivot.y = -navigation.height * 0.7;
@@ -205,8 +211,8 @@ export class GameScreen extends Container {
         this.comboMessage.y = div - 50;
         this.comboLevel.x = centerX + 150;
         this.comboLevel.y = div - 50;
-        // this.cauldron.x = centerX;
-        // this.cauldron.y = div - 60;
+        this.cauldron.x = centerX;
+        this.cauldron.y = div - 60;
         this.pauseButton.x = 30;
         this.pauseButton.y = 30;
         this.settingsButton.x = width - 30;
@@ -223,14 +229,14 @@ export class GameScreen extends Container {
 
     /** Show screen with animations */
     public async show() {
-        // bgm.play("bgm-game.mp3", { volume: 0.5 });
+        bgm.play("bgm-game.mp3", { volume: 0.5 });
         await gsap.to(this.gameContainer.pivot, {
             y: 0,
             duration: 0.5,
             ease: "back.out",
         });
         await this.countdown.show();
-        // await this.cauldron.show();
+        await this.cauldron.show();
         await this.countdown.hide();
         this.score.show();
         this.pauseButton.show();
@@ -291,7 +297,7 @@ export class GameScreen extends Container {
         this.match3.stopPlaying();
         const performance = this.match3.stats.getGameplayPerformance();
         userStats.save(this.match3.config.mode, performance);
-        navigation.showScreen(ResultScreen);
+        navigation.showScreen(ResultScreen, this.app);
     }
 
     /** Auto pause the game when window go out of focus */

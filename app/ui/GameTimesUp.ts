@@ -1,4 +1,4 @@
-import { Container } from "pixi.js";
+import { Application, Container } from "pixi.js";
 import { i18n } from "../utils/i18n";
 import { Cloud } from "./Cloud";
 import { Label } from "./Label";
@@ -9,26 +9,30 @@ import gsap from "gsap";
  * transition to the Result screen
  */
 export class GameTimesUp extends Container {
+    app: Application;
     /** Inner container for animation */
     private container: Container;
     /** The animated cloud background */
-    // private cloud: Cloud;
+    private cloud: Cloud;
     /** The displayed message */
     private messageLabel: Label;
 
-    constructor() {
+    constructor(app: Application) {
         super();
-
+        this.app = app;
         this.container = new Container();
         this.addChild(this.container);
 
-        // this.cloud = new Cloud({
-        //     color: 0x0a0025,
-        //     width: 500,
-        //     height: 70,
-        //     circleSize: 100,
-        // });
-        // this.container.addChild(this.cloud);
+        this.cloud = new Cloud(
+            {
+                color: 0x0a0025,
+                width: 500,
+                height: 70,
+                circleSize: 100,
+            },
+            this.app
+        );
+        this.container.addChild(this.cloud);
 
         this.messageLabel = new Label(i18n.timesUp, {
             fill: 0xffffff,
@@ -55,15 +59,15 @@ export class GameTimesUp extends Container {
             duration,
             ease: "expo.out",
         });
-        // await this.cloud.playFormAnimation(duration);
+        await this.cloud.playFormAnimation(duration);
     }
 
     /** Expand the component to cover the entire screen, for transitioning to Result screen */
     public async playExpandAnimation() {
         const duration = 0.5;
 
-        // gsap.killTweensOf(this.cloud);
-        // gsap.killTweensOf(this.cloud.scale);
+        gsap.killTweensOf(this.cloud);
+        gsap.killTweensOf(this.cloud.scale);
         gsap.killTweensOf(this.messageLabel.scale);
         gsap.killTweensOf(this.messageLabel);
         gsap.to(this.messageLabel, { alpha: 0, duration, ease: "linear" });
@@ -73,12 +77,12 @@ export class GameTimesUp extends Container {
             duration,
             ease: "expo.in",
         });
-        // gsap.to(this.cloud, { height: 1000, duration, ease: "expo.in" });
-        // await gsap.to(this.cloud.scale, {
-        //     x: 9,
-        //     y: 9,
-        //     duration,
-        //     ease: "expo.in",
-        // });
+        gsap.to(this.cloud, { height: 1000, duration, ease: "expo.in" });
+        await gsap.to(this.cloud.scale, {
+            x: 9,
+            y: 9,
+            duration,
+            ease: "expo.in",
+        });
     }
 }

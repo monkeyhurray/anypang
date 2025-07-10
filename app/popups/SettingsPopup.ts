@@ -13,6 +13,8 @@ import { VolumeSlider } from "../ui/VolumeSlider";
 import { ModeSwitcher } from "../ui/ModeSwitcher";
 import { GameScreen } from "../screens/GameScreen";
 
+const APP_VERSION = "스타이카 1.0.0";
+
 /** Popup for volume and game mode settings - game mode cannot be changed during gameplay */
 export class SettingsPopup extends Container {
     /** The dark semi-transparent background covering current screen */

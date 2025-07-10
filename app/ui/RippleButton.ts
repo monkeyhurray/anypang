@@ -2,7 +2,7 @@ import { FancyButton } from "@pixi/ui";
 import { Sprite, Texture } from "pixi.js";
 import gsap from "gsap";
 import { waitFor } from "../utils/asyncUtils";
-// import { sfx } from '../utils/audio';
+import { sfx } from "../utils/audio";
 
 const defaultRippleButtonOptions = {
     image: "",
@@ -38,7 +38,7 @@ export class RippleButton extends FancyButton {
     }
 
     private handleHover() {
-        // sfx.play("sfx-hover.wav");
+        sfx.play("sfx-hover.wav");
         gsap.to(this.scale, {
             x: 1.2,
             y: 1.2,
@@ -52,7 +52,7 @@ export class RippleButton extends FancyButton {
     }
 
     private handleDown() {
-        // sfx.play('sfx-press.wav');
+        sfx.play("sfx-press.wav");
         this.playRipples();
     }
 

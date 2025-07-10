@@ -1,4 +1,4 @@
-import { Container } from "pixi.js";
+import { Application, Container } from "pixi.js";
 import { Label } from "./Label";
 import { Cloud } from "./Cloud";
 import gsap from "gsap";
@@ -14,29 +14,33 @@ export type CloudLabelOptions = typeof defaultCloudLabelOptions;
  * Class that composes a Cloud and a Label, used in different places in this app,
  */
 export class CloudLabel extends Container {
+    public app: Application;
     /** Inner container for components, for animation purposes */
     private container: Container;
     /** The animated cloud background */
-    // private cloud: Cloud;
+    private cloud: Cloud;
     /** The message label */
     private messageLabel: Label;
     /** Turns false if component is hidden */
     private showing = true;
 
-    constructor(options: Partial<CloudLabelOptions> = {}) {
+    constructor(options: Partial<CloudLabelOptions> = {}, app: Application) {
         super();
         const opts = { ...defaultCloudLabelOptions, ...options };
-
+        this.app = app;
         this.container = new Container();
         this.addChild(this.container);
 
-        // this.cloud = new Cloud({
-        //     color: opts.color,
-        //     width: 120,
-        //     height: 10,
-        //     circleSize: 30,
-        // });
-        // this.container.addChild(this.cloud);
+        this.cloud = new Cloud(
+            {
+                color: opts.color,
+                width: 120,
+                height: 10,
+                circleSize: 30,
+            },
+            this.app
+        );
+        this.container.addChild(this.cloud);
 
         this.messageLabel = new Label("", {
             fill: opts.labelColor,
@@ -63,7 +67,7 @@ export class CloudLabel extends Container {
         this.killTweens();
         if (animated) {
             const duration = 1;
-            // this.cloud.playFormAnimation(duration * 0.5);
+            this.cloud.playFormAnimation(duration * 0.5);
             this.container.alpha = 0;
             this.messageLabel.scale.set(3);
             this.container.scale.set(0.5);
@@ -97,7 +101,7 @@ export class CloudLabel extends Container {
         this.showing = false;
         this.killTweens();
         if (animated) {
-            // this.cloud.playDismissAnimation(0.3);
+            this.cloud.playDismissAnimation(0.3);
             await gsap.to(this.container, {
                 alpha: 0,
                 duration: 0.3,

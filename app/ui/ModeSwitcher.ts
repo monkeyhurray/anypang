@@ -1,6 +1,6 @@
 import { CheckBox, RadioGroup } from "@pixi/ui";
 import { Match3Mode } from "../match3/Match3Config";
-// import { sfx } from '../utils/audio';
+import { sfx } from "../utils/audio";
 
 import { i18n } from "../utils/i18n";
 import { Graphics } from "pixi.js";
@@ -78,7 +78,7 @@ export class ModeSwitcher extends RadioGroup {
 
         this.addChild(this.innerView);
         this.onChange.connect(() => {
-            // sfx.play('sfx-press.wav');
+            sfx.play("sfx-press.wav");
         });
     }
 

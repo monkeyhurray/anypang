@@ -1,11 +1,10 @@
 import { Application, Container, Sprite, Texture } from "pixi.js";
-import { createPixiPangApp } from "../libs/pixi-pang/createPixiPangApp";
 
 /**
  * The cloud that shows up on the top of the screen, during loading.
  */
 export class SmokeCloud extends Container {
-    private app: Application;
+    public app: Application;
     /** The tint colour of this component */
     private color = 0x2c136c;
     /** Rectangular base area of the cloud */
@@ -19,14 +18,14 @@ export class SmokeCloud extends Container {
 
     constructor(app: Application) {
         super();
-
+        this.app = app;
         this.base = new Sprite(Texture.WHITE);
         this.base.tint = this.color;
         this.addChild(this.base);
 
         this.circlesContainer = new Container();
         this.addChild(this.circlesContainer);
-        this.app = app;
+
         this.onRender = () => this.renderUpdate();
     }
 

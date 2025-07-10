@@ -3,7 +3,7 @@ import { i18n } from "../utils/i18n";
 import { Label } from "./Label";
 import gsap from "gsap";
 import { throttle } from "../utils/throttle";
-// import { sfx } from '../utils/audio';
+import { sfx } from "../utils/audio";
 
 /**
  * Score component that shows up in the Result screen, used for both
@@ -43,7 +43,7 @@ export class ResultScore extends Container {
         if (this.messageLabel.text !== text) {
             this.messageLabel.text = text;
             throttle("score", 100, () => {
-                // sfx.play("sfx-points.wav", { speed, volume: 0.3 });
+                sfx.play("sfx-points.wav", { speed, volume: 0.3 });
             });
         }
     }

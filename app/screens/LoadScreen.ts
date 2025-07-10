@@ -5,15 +5,13 @@ import { Cauldron } from "../ui/Cauldron";
 import { PixiLogo } from "../ui/PixiLogo";
 import { SmokeCloud } from "../ui/SmokeCloud";
 
-import { createPixiPangApp } from "../libs/pixi-pang/createPixiPangApp";
-
 /** Screen shown while loading assets */
 export class LoadScreen extends Container {
-    private app: Application;
+    public app: Application;
     /** Assets bundles required by this screen */
-    public static assetBundles = ["preload"];
+    // public static assetBundles = ["preload"];
     /** ANimated cauldron */
-    // private cauldron: Cauldron;
+    private cauldron: Cauldron;
     /** The PixiJS logo */
     private pixiLogo: PixiLogo;
     /** The cloud animation at the top */
@@ -23,10 +21,9 @@ export class LoadScreen extends Container {
 
     constructor(app: Application) {
         super();
-
         this.app = app;
-        // this.cauldron = new Cauldron();
-        // this.addChild(this.cauldron);
+        this.cauldron = new Cauldron();
+        this.addChild(this.cauldron);
 
         this.message = new Text({
             text: i18n.loadingMessage,
@@ -49,8 +46,8 @@ export class LoadScreen extends Container {
 
     /** Resize the screen, fired whenever window size changes  */
     public resize(width: number, height: number) {
-        // this.cauldron.x = width * 0.5;
-        // this.cauldron.y = height * 0.5;
+        this.cauldron.x = width * 0.5;
+        this.cauldron.y = height * 0.5;
         this.message.x = width * 0.5;
         this.message.y = height * 0.75;
         this.pixiLogo.x = width * 0.5;
@@ -68,7 +65,6 @@ export class LoadScreen extends Container {
     /** Hide screen with animations */
     public async hide() {
         // Change then hide the loading message
-        const app = await createPixiPangApp();
         this.message.text = i18n.loadingDone;
         gsap.killTweensOf(this.message);
         gsap.to(this.message, {
@@ -81,7 +77,7 @@ export class LoadScreen extends Container {
         // Make the cloud cover the entire screen in a flat colour
         gsap.killTweensOf(this.cloud);
         await gsap.to(this.cloud, {
-            height: app.renderer.height,
+            height: this.app.renderer.height,
             duration: 1,
             ease: "quad.in",
             delay: 0.5,

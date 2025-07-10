@@ -1,4 +1,4 @@
-import { Assets, Container, Sprite, Texture } from "pixi.js";
+import { Container, Sprite, Texture } from "pixi.js";
 import gsap from "gsap";
 import { randomRange } from "../utils/random";
 import { registerCustomEase } from "../utils/animation";
@@ -40,22 +40,9 @@ export class Cauldron extends Container {
         this.shadow.visible = shadow;
         this.container.addChild(this.shadow);
 
-        const skeleton = Assets.get("cauldron-skeleton.json");
-        const atlas = Assets.get("cauldron-skeleton.atlas");
-
-        if (!skeleton) {
-            console.error("❌ skeleton 파일 로딩 실패");
-        }
-        if (!atlas) {
-            console.error("❌ atlas 파일 로딩 실패");
-        }
-
-        console.log("skeleton object:", skeleton); // .bones 있나 확인
-        console.log("atlas object:", atlas);
-
         this.spine = Spine.from({
-            skeleton,
-            atlas,
+            skeleton: "cauldron-skeleton.json",
+            atlas: "cauldron-skeleton.atlas",
         });
 
         this.spine.autoUpdate = true;

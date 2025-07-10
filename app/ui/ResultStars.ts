@@ -1,7 +1,7 @@
 import { Container } from "pixi.js";
 
 import { earthquake } from "../utils/animation";
-// import { sfx } from "../utils/audio";
+import { sfx } from "../utils/audio";
 import { Star } from "./Star";
 import { createPixiPangApp } from "../libs/pixi-pang/createPixiPangApp";
 
@@ -103,19 +103,19 @@ export class ResultStars extends Container {
         if (grade >= 1) {
             await this.star1.playStamp();
             earthquake(app.stage.pivot, 4);
-            // sfx.play("sfx-correct.wav", { speed: 0.9 });
+            sfx.play("sfx-correct.wav", { speed: 0.9 });
         }
 
         if (grade >= 2) {
             await this.star2.playStamp();
             earthquake(app.stage.pivot, 8);
-            // sfx.play("sfx-correct.wav", { speed: 1.0 });
+            sfx.play("sfx-correct.wav", { speed: 1.0 });
         }
 
         if (grade >= 3) {
             await this.star3.playStamp();
             earthquake(app.stage.pivot, 16);
-            // sfx.play("sfx-correct.wav", { speed: 1.5 });
+            sfx.play("sfx-correct.wav", { speed: 1.5 });
         }
     }
 }

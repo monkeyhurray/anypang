@@ -12,6 +12,7 @@ import {
     Match3Grid,
     Match3Type,
 } from "./Match3Utility";
+
 /**
  * Holds the grid state and control its visual representation, creating and removing pieces accordingly.
  * As a convention for this game, 'grid' is usually referring to the match3 state (array of types),
@@ -19,7 +20,7 @@ import {
  */
 export class Match3Board {
     /** The Match3 instance */
-
+    public match3: Match3;
     /** The grid state, with only numbers */
     public grid: Match3Grid = [];
     /** All piece sprites currently being used in the grid */
@@ -39,7 +40,9 @@ export class Match3Board {
     /** Map piece types to piece names */
     public typesMap!: Record<number, string>;
 
-    constructor(public match3: Match3) {
+    constructor(match3: Match3) {
+        this.match3 = match3;
+
         this.piecesContainer = new Container();
         this.match3.addChild(this.piecesContainer);
 
@@ -111,9 +114,8 @@ export class Match3Board {
      * @param position The grid position where the new piece will be attached
      * @param type The type of the nre piece
      */
-    public async createPiece(position: Match3Position, pieceType: Match3Type) {
+    public createPiece(position: Match3Position, pieceType: Match3Type) {
         const name = this.typesMap[pieceType];
-
         const piece = pool.get(Match3Piece);
         const viewPosition = this.getViewPositionByGridPosition(position);
         piece.onMove = (from, to) => this.match3.actions.actionMove(from, to);
@@ -158,7 +160,7 @@ export class Match3Board {
         if (oldPiece) this.disposePiece(oldPiece);
         match3SetPieceType(this.grid, position, pieceType);
         if (!pieceType) return;
-        const piece = await this.createPiece(position, pieceType);
+        const piece = this.createPiece(position, pieceType);
         await piece.animateSpawn();
     }
 

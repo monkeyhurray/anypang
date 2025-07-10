@@ -198,7 +198,7 @@ export class Match3Process {
             const columnCount = piecesPerColumn[piece.column];
             const height = this.match3.board.getHeight();
             piece.y = -height * 0.5 - columnCount * this.match3.config.tileSize;
-            animPromises.push((await piece).animateFall(x, y));
+            animPromises.push(piece.animateFall(x, y));
         }
 
         await Promise.all(animPromises);

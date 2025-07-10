@@ -16,7 +16,7 @@ export type CloudOptions = typeof defaultCloudOptions;
  * A cloud-like animated component formed by circles that can be reused in different parts of the game
  */
 export class Cloud extends Container {
-    private app: Application;
+    public app: Application;
     /** Cloud display settings */
     private options: CloudOptions;
     /** Rectangular area of the cloud */
@@ -49,7 +49,7 @@ export class Cloud extends Container {
         this.width = this.options.width;
         this.height = this.options.height;
 
-        this.onRender = () => this.renderUpdate();
+        // this.onRender = () => this.renderUpdate();
     }
 
     /** Get cloud width from its base, not visible area */

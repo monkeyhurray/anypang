@@ -17,10 +17,7 @@ import { CloudLabel } from "../ui/CloudLabel";
 import { ResultScore } from "../ui/ResultScore";
 import { RippleButton } from "../ui/RippleButton";
 import { SettingsPopup } from "../popups/SettingsPopup";
-import {
-    bgm,
-    // sfx
-} from "../utils/audio";
+import { bgm, sfx } from "../utils/audio";
 import { getUserSettings } from "../utils/userSettings";
 import { waitFor } from "../utils/asyncUtils";
 import { MaskTransition } from "../ui/MaskTransition";
@@ -30,11 +27,12 @@ import { userStats } from "../utils/userStats";
 export class ResultScreen extends Container {
     /** Assets bundles required by this screen */
 
-    public static assetBundles = ["result", "common"];
+    public app: Application;
+    // public static assetBundles = ["result", "common"];
     /** The centered box area containing the results */
     private panel: Container;
     /** Animated dragon */
-    // private dragon: Dragon;
+    private dragon: Dragon;
     /** The panel background */
     private panelBase: Sprite;
     /** The screen title */
@@ -60,8 +58,9 @@ export class ResultScreen extends Container {
     /** A special transition that temporarely masks the entire screen */
     private maskTransition?: MaskTransition;
 
-    constructor(public app: Application) {
+    constructor(app: Application) {
         super();
+        this.app = app;
         const navigation = getNavigation();
         this.settingsButton = new RippleButton({
             image: "icon-settings",
@@ -72,9 +71,9 @@ export class ResultScreen extends Container {
         );
         this.addChild(this.settingsButton);
 
-        // this.dragon = new Dragon();
-        // this.dragon.playTransition();
-        // this.addChild(this.dragon);
+        this.dragon = new Dragon();
+        this.dragon.playTransition();
+        this.addChild(this.dragon);
 
         this.panel = new Container();
         this.addChild(this.panel);
@@ -97,10 +96,13 @@ export class ResultScreen extends Container {
         this.cauldron.y = 145;
         this.panel.addChild(this.cauldron);
 
-        this.message = new CloudLabel({
-            color: 0xffffff,
-            labelColor: 0x2c136c,
-        });
+        this.message = new CloudLabel(
+            {
+                color: 0xffffff,
+                labelColor: 0x2c136c,
+            },
+            this.app
+        );
         this.message.y = -95;
         this.panel.addChild(this.message);
 
@@ -132,10 +134,10 @@ export class ResultScreen extends Container {
         this.addChild(this.continueButton);
 
         this.continueButton.onPress.connect(() =>
-            navigation.showScreen(GameScreen)
+            navigation.showScreen(GameScreen, this.app)
         );
 
-        this.maskTransition = new MaskTransition(app);
+        this.maskTransition = new MaskTransition(this.app);
     }
 
     /** Prepare the screen just before showing */
@@ -143,7 +145,7 @@ export class ResultScreen extends Container {
         this.bottomBase.visible = false;
         this.continueButton.visible = false;
         this.panel.visible = false;
-        // this.dragon.visible = false;
+        this.dragon.visible = false;
         this.score.visible = false;
         this.bestScore.visible = false;
         this.message.hide(false);
@@ -157,8 +159,8 @@ export class ResultScreen extends Container {
 
     /** Resize the screen, fired whenever window size changes */
     public resize(width: number, height: number) {
-        // this.dragon.x = width * 0.5 + 20;
-        // this.dragon.y = height * 0.5 - 210;
+        this.dragon.x = width * 0.5 + 20;
+        this.dragon.y = height * 0.5 - 210;
         this.panel.x = width * 0.5;
         this.panel.y = height * 0.5;
         this.continueButton.x = width * 0.5;
@@ -171,7 +173,7 @@ export class ResultScreen extends Container {
 
     /** Show screen with animations */
     public async show() {
-        bgm.play("common/bgm-main.mp3", { volume: 0.5 });
+        bgm.play("bgm-main.mp3", { volume: 0.5 });
         // GameScreen hide to a flat colour covering the viewport, which gets replaced
         // by this transition, revealing this screen
         this.maskTransition?.playTransitionIn();
@@ -180,7 +182,7 @@ export class ResultScreen extends Container {
         await waitFor(0.5);
         const mode = getUserSettings().getGameMode();
         const performance = userStats.load(mode);
-        // this.showDragon();
+        this.showDragon();
         await this.showPanel();
         this.animateGradeStars(performance.grade);
         await this.animatePoints(performance.score);
@@ -191,42 +193,42 @@ export class ResultScreen extends Container {
     /** Hide screen with animations */
     public async hide() {
         this.hideBottom();
-        // await this.hideDragon();
+        await this.hideDragon();
         await this.hidePanel();
     }
 
     /** Reveal the animated dragon behind the panel */
-    // private async showDragon() {
-    //     gsap.killTweensOf(this.dragon.scale);
-    //     gsap.killTweensOf(this.dragon.pivot);
-    //     this.dragon.visible = true;
-    //     this.dragon.scale.set(0);
-    //     this.dragon.pivot.y = -300;
-    //     gsap.to(this.dragon.pivot, {
-    //         y: 0,
-    //         duration: 0.7,
-    //         ease: "back.out",
-    //         delay: 0.1,
-    //     });
-    //     await gsap.to(this.dragon.scale, {
-    //         x: 1,
-    //         y: 1,
-    //         duration: 0.3,
-    //         ease: "back.out",
-    //         delay: 0.2,
-    //     });
-    // }
+    private async showDragon() {
+        gsap.killTweensOf(this.dragon.scale);
+        gsap.killTweensOf(this.dragon.pivot);
+        this.dragon.visible = true;
+        this.dragon.scale.set(0);
+        this.dragon.pivot.y = -300;
+        gsap.to(this.dragon.pivot, {
+            y: 0,
+            duration: 0.7,
+            ease: "back.out",
+            delay: 0.1,
+        });
+        await gsap.to(this.dragon.scale, {
+            x: 1,
+            y: 1,
+            duration: 0.3,
+            ease: "back.out",
+            delay: 0.2,
+        });
+    }
 
     /** Hide the animated dragon behind the panel */
-    // private async hideDragon() {
-    //     gsap.killTweensOf(this.dragon.pivot);
-    //     await gsap.to(this.dragon.pivot, {
-    //         y: -100,
-    //         duration: 0.2,
-    //         ease: "back.in",
-    //     });
-    //     this.dragon.scale.set(0);
-    // }
+    private async hideDragon() {
+        gsap.killTweensOf(this.dragon.pivot);
+        await gsap.to(this.dragon.pivot, {
+            y: -100,
+            duration: 0.2,
+            ease: "back.in",
+        });
+        this.dragon.scale.set(0);
+    }
 
     /** Show the container box panel animated */
     private async showPanel() {
@@ -324,11 +326,11 @@ export class ResultScreen extends Container {
         const messages = i18n as Record<string, string>;
         const message = "grade" + grade;
         this.message.text = messages[message];
-        // if (grade < 1) {
-        //     sfx.play("sfx-incorrect");
-        // } else {
-        //     sfx.play("sfx-special");
-        // }
+        if (grade < 1) {
+            sfx.play("sfx-incorrect.wav");
+        } else {
+            sfx.play("sfx-special.wav");
+        }
         await this.message.show();
     }
 }

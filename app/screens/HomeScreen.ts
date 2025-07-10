@@ -1,12 +1,12 @@
 import { Container, NineSliceSprite, Texture } from "pixi.js";
-import { navigation } from "../utils/navigation";
+import { getNavigation } from "../utils/navigation";
 import { GameScreen } from "./GameScreen";
 import gsap from "gsap";
 import { i18n } from "../utils/i18n";
 import { LargeButton } from "../ui/LargeButton";
 import { registerCustomEase } from "../utils/animation";
 import { Logo } from "../ui/Logo";
-// import { Dragon } from "../ui/Dragon";
+import { Dragon } from "../ui/Dragon";
 import { waitFor } from "../utils/asyncUtils";
 import { SmallButton } from "../ui/SmallButton";
 import { ImageButton } from "../ui/ImageButton";
@@ -23,11 +23,11 @@ const easeSoftBackOut = registerCustomEase(
 /** The first screen that shows up after loading */
 export class HomeScreen extends Container {
     /** Assets bundles required by this screen */
-    public static assetBundles = ["home", "common"];
+    // public static assetBundles = ["home", "common"];
     /** The game logo */
     private logo: Logo;
     /** Animated dragon */
-    // private dragon: Dragon;
+    private dragon: Dragon;
     /** Button that leads to gameplay */
     private playButton: LargeButton;
     /** Button that links to the Github project */
@@ -43,13 +43,13 @@ export class HomeScreen extends Container {
 
     constructor() {
         super();
-
+        const navigation = getNavigation();
         this.logo = new Logo();
         this.addChild(this.logo);
 
-        // this.dragon = new Dragon();
-        // this.dragon.playIdle();
-        // this.addChild(this.dragon);
+        this.dragon = new Dragon();
+        this.dragon.playIdle();
+        this.addChild(this.dragon);
 
         this.base = new NineSliceSprite({
             texture: Texture.from("rounded-rectangle"),
@@ -103,8 +103,8 @@ export class HomeScreen extends Container {
 
     /** Resize the screen, fired whenever window size changes  */
     public resize(width: number, height: number) {
-        // this.dragon.x = width * 0.5;
-        // this.dragon.y = height * 0.5;
+        this.dragon.x = width * 0.5;
+        this.dragon.y = height * 0.5;
         this.playButton.x = width * 0.5;
         this.playButton.y = height - 130;
         this.base.width = width;
@@ -123,7 +123,7 @@ export class HomeScreen extends Container {
 
     /** Show screen with animations */
     public async show() {
-        bgm.play("common/bgm-main.mp3", { volume: 0.7 });
+        bgm.play("bgm-main.mp3", { volume: 0.7 });
 
         // Reset visual state, hide things that will show up later
         this.playButton.hide(false);
@@ -131,7 +131,7 @@ export class HomeScreen extends Container {
         this.infoButton.hide(false);
         this.settingsButton.hide(false);
         this.githubButton.hide(false);
-        // this.dragon.show(false);
+        this.dragon.show(false);
         this.logo.show(false);
 
         // Play reveal animation
@@ -141,7 +141,7 @@ export class HomeScreen extends Container {
         await waitFor(0.5);
         await this.playButton.show();
         this.interactiveChildren = true;
-        // this.infoButton.show();
+        this.infoButton.show();
         await this.settingsButton.show();
         this.pixiButton.show();
         await this.githubButton.show();
@@ -158,14 +158,14 @@ export class HomeScreen extends Container {
         await waitFor(0.1);
         this.logo.hide();
         await waitFor(0.1);
-        // await this.dragon.hide();
+        await this.dragon.hide();
     }
 
     /** Animation for revealing the screen behind the purple sprite */
     private async playRevealAnimation() {
         const duration = 1;
         const ease = easeSoftBackOut;
-
+        const navigation = getNavigation();
         gsap.killTweensOf(this.base);
         gsap.killTweensOf(this.base.pivot);
 

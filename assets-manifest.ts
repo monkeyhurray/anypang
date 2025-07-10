@@ -188,56 +188,57 @@ export const manifest = {
                     alias: "white-cauldron",
                     src: "assets/common/common-atlas/white-cauldron.png",
                 },
-                // {
-                //     alias: "bgm-game.mp3",
-                //     src: "assets/common/bgm-game.mp3",
-                // },
-                // {
-                //     alias: "bgm-main.mp3",
-                //     src: "assets/common/bgm-main.mp3",
-                // },
-                // {
-                //     alias: "dragon-skeleton.atlas",
-                //     src: "assets/common/dragon-skeleton.atlas",
-                // },
                 {
-                    alias: "dragon-skeleton",
+                    alias: "bgm-game.mp3",
+                    src: "assets/common/bgm-game.mp3",
+                },
+                {
+                    alias: "bgm-main.mp3",
+                    src: "assets/common/bgm-main.mp3",
+                },
+                {
+                    alias: "dragon-skeleton.atlas",
+                    src: "assets/common/dragon-skeleton.atlas",
+                    type: "text",
+                },
+                {
+                    alias: "dragon-skeleton.json",
                     src: "assets/common/dragon-skeleton.json",
                 },
                 {
                     alias: "dragon-skeleton.png",
                     src: "assets/common/dragon-skeleton.png",
                 },
-                // {
-                //     alias: "sfx-bubble.wav",
-                //     src: "assets/common/sfx-bubble.wav",
-                // },
                 {
-                    alias: "sfx-correct",
+                    alias: "sfx-bubble.wav",
+                    src: "assets/common/sfx-bubble.wav",
+                },
+                {
+                    alias: "sfx-correct.wav",
                     src: "assets/common/sfx-correct.wav",
                 },
-                // {
-                //     alias: "sfx-countdown.wav",
-                //     src: "assets/common/sfx-countdown.wav",
-                // },
-                // {
-                //     alias: "sfx-hover.wav",
-                //     src: "assets/common/sfx-hover.wav",
-                // },
                 {
-                    alias: "sfx-incorrect",
+                    alias: "sfx-countdown.wav",
+                    src: "assets/common/sfx-countdown.wav",
+                },
+                {
+                    alias: "sfx-hover.wav",
+                    src: "assets/common/sfx-hover.wav",
+                },
+                {
+                    alias: "sfx-incorrect.wav",
                     src: "assets/common/sfx-incorrect.wav",
                 },
-                { alias: "sfx-match", src: "assets/common/sfx-match.wav" },
-                // {
-                //     alias: "sfx-points.wav",
-                //     src: "assets/common/sfx-points.wav",
-                // },
-                // { alias: "sfx-press.wav", src: "assets/common/sfx-press.wav" },
-                // {
-                //     alias: "sfx-special.wav",
-                //     src: "assets/common/sfx-special.wav",
-                // },
+                { alias: "sfx-match.wav", src: "assets/common/sfx-match.wav" },
+                {
+                    alias: "sfx-points.wav",
+                    src: "assets/common/sfx-points.wav",
+                },
+                { alias: "sfx-press.wav", src: "assets/common/sfx-press.wav" },
+                {
+                    alias: "sfx-special.wav",
+                    src: "assets/common/sfx-special.wav",
+                },
             ],
         },
         {
@@ -260,12 +261,19 @@ export const manifest = {
                     alias: "background",
                     src: "assets/preload/preload-atlas/background.png",
                 },
-                { alias: "sound", src: "assets/common/sound.mp3" },
+                {
+                    alias: "circle",
+                    src: "assets/preload/preload-atlas/circle.png",
+                },
+                {
+                    alias: "logo-pixi",
+                    src: "assets/preload/preload-atlas/logo-pixi.png",
+                },
             ],
         },
         {
             name: "result",
-            basePath: "assets",
+            basePath: "assets/",
             assets: [
                 {
                     alias: "result-base",

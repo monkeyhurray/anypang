@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { createPixiPangApp } from "../libs/pixi-pang/createPixiPangApp";
-import { Application, Container, extensions, Sprite } from "pixi.js";
+import { Application } from "pixi.js";
 import { Assets } from "pixi.js";
 import { TiledBackground } from "@/app/ui/TiledBackground";
 import { initNavigation, getNavigation } from "@/app/utils/navigation";
@@ -13,7 +13,7 @@ import { GameScreen } from "../screens/GameScreen";
 import { LoadScreen } from "../screens/LoadScreen";
 import { ResultScreen } from "../screens/ResultScreen";
 import { HomeScreen } from "../screens/HomeScreen";
-import { loadAssetManifest } from "../utils/manifest";
+
 import { manifest } from "../../assets-manifest";
 
 const GameCanvas = () => {
@@ -45,30 +45,34 @@ const GameCanvas = () => {
 
             const bg = new TiledBackground(app);
             await bg.init();
-            // navigation.setBackground(TiledBackground);
+
             app.stage.addChild(bg);
             // app.ticker.add(() => bg.update(app.ticker));
 
             // 6. 에셋 번들 로딩
             try {
-                await Assets.loadBundle("common");
+                await Assets.loadBundle("home");
                 await Assets.loadBundle("game");
+                await Assets.loadBundle("common");
                 await Assets.loadBundle("preload");
+                await Assets.loadBundle("result");
             } catch (e) {
                 console.error("❌ 번들 로딩 에러:", e);
             }
 
             // 7. URL 파라미터에 따른 초기 화면 전환
-            await navigation.showScreen(GameScreen, app);
 
-            // if (getUrlParam("game") !== null) {
-            // } else if (getUrlParam("load") !== null) {
-            //     await navigation.showScreen(LoadScreen, app);
-            // } else if (getUrlParam("result") !== null) {
-            //     await navigation.showScreen(ResultScreen, app);
-            // } else {
-            //     await navigation.showScreen(HomeScreen, app);
-            // }
+            await navigation.showScreen(LoadScreen, app);
+
+            if (getUrlParam("game") !== null) {
+                await navigation.showScreen(GameScreen, app);
+            } else if (getUrlParam("load") !== null) {
+                await navigation.showScreen(LoadScreen, app);
+            } else if (getUrlParam("result") !== null) {
+                await navigation.showScreen(ResultScreen, app);
+            } else {
+                await navigation.showScreen(HomeScreen);
+            }
 
             // 8. 정리 함수 등록
             cleanup = () => {
@@ -82,6 +86,12 @@ const GameCanvas = () => {
         // 9. 언마운트 시 정리
         return () => {
             cleanup?.();
+
+            Assets.unloadBundle("home");
+            Assets.unloadBundle("game");
+            Assets.unloadBundle("common");
+            Assets.unloadBundle("preload");
+            Assets.unloadBundle("result");
             if (appRef.current) {
                 appRef.current.destroy(true, { children: true });
                 appRef.current = null;

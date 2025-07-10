@@ -1,14 +1,11 @@
 import { Application, Sprite, Texture } from "pixi.js";
 import gsap from "gsap";
-
 import { getNavigation } from "../utils/navigation";
-import { createPixiPangApp } from "../libs/pixi-pang/createPixiPangApp";
 
 /**
  * Cover or reveal the entire app, masking the whole screen in a cauldron shape,
  * scaling up (reveal) or down (cover) animated
  */
-
 export class MaskTransition {
     public app: Application;
     /** Flat colour base to cover the screen */
@@ -36,19 +33,16 @@ export class MaskTransition {
 
     /** Mask the app in cauldron shape that scales down, hiding the entire screen */
     public async playTransitionOut() {
-        const app = await createPixiPangApp();
-
-        const navigation = getNavigation();
         const duration = 0.7;
-
+        const navigation = getNavigation();
         this.resize();
         this.cauldron.scale.set(20);
         this.cauldron.rotation = 0.5;
         this.cauldron.alpha = 1;
 
         // Update layers
-        app.stage.addChildAt(this.base, 0);
-        app.stage.addChildAt(this.cauldron, 0);
+        this.app.stage.addChildAt(this.base, 0);
+        this.app.stage.addChildAt(this.cauldron, 0);
         // TODO: Double check this
         // this.cauldron.updateTransform();
 
@@ -71,14 +65,13 @@ export class MaskTransition {
         navigation.container.mask = null;
 
         // Cleanup
-        app.stage.removeChild(this.base);
-        app.stage.removeChild(this.cauldron);
+        this.app.stage.removeChild(this.base);
+        this.app.stage.removeChild(this.cauldron);
     }
 
     /** Mask the app in cauldron shape that scales up, showin the entire screen */
     public async playTransitionIn() {
         const duration = 0.7;
-
         const navigation = getNavigation();
         this.resize();
         this.cauldron.scale.set(0);

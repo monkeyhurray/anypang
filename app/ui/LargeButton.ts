@@ -2,7 +2,7 @@ import { FancyButton } from "@pixi/ui";
 import { NineSliceSprite, Texture } from "pixi.js";
 import { Label } from "./Label";
 import gsap from "gsap";
-// import { sfx } from '../utils/audio';
+import { sfx } from "../utils/audio";
 
 const defaultLargeButtonOptions = {
     text: "",
@@ -74,11 +74,11 @@ export class LargeButton extends FancyButton {
     }
 
     private handleHover() {
-        // sfx.play("sfx-hover.wav");
+        sfx.play("sfx-hover.wav");
     }
 
     private handleDown() {
-        // sfx.play("sfx-press.wav");
+        sfx.play("sfx-press.wav");
         this.messageLabel.y = -5;
     }
 

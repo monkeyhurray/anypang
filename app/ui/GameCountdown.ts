@@ -1,11 +1,11 @@
-import { Container } from "pixi.js";
+import { Application, Container } from "pixi.js";
 import { i18n } from "../utils/i18n";
 import { Cloud } from "./Cloud";
 import { Label } from "./Label";
 import gsap from "gsap";
 import { registerCustomEase } from "../utils/animation";
 import { waitFor } from "../utils/asyncUtils";
-// import { sfx } from "../utils/audio";
+import { sfx } from "../utils/audio";
 
 /** Custom ease curve for showing up countdown labels in a way that they slow down in the middle of the animation */
 const easeMidSlowMotion = registerCustomEase(
@@ -17,26 +17,30 @@ const easeMidSlowMotion = registerCustomEase(
  * a regular "3, 2, 1... GO!" animation, for speed.
  */
 export class GameCountdown extends Container {
+    public app: Application;
     /** Inner container for internal animations */
     private container: Container;
     /** The animated cloud background */
-    // private cloud: Cloud;
+    private cloud: Cloud;
     /** The message displaying */
     private messageLabel: Label;
 
-    constructor() {
+    constructor(app: Application) {
         super();
-
+        this.app = app;
         this.container = new Container();
         this.addChild(this.container);
 
-        // this.cloud = new Cloud({
-        //     color: 0x0a0025,
-        //     width: 400,
-        //     height: 70,
-        //     circleSize: 100,
-        // });
-        // this.container.addChild(this.cloud);
+        this.cloud = new Cloud(
+            {
+                color: 0x0a0025,
+                width: 400,
+                height: 70,
+                circleSize: 100,
+            },
+            this.app
+        );
+        this.container.addChild(this.cloud);
 
         this.messageLabel = new Label("", {
             fill: 0xffffff,
@@ -48,7 +52,7 @@ export class GameCountdown extends Container {
 
     /** Play "Ready?" animation */
     private async playReadyAnimation() {
-        // sfx.play("sfx-countdown.wav", { speed: 0.8, volume: 0.5 });
+        sfx.play("sfx-countdown.wav", { speed: 0.8, volume: 0.5 });
         gsap.killTweensOf(this.messageLabel);
         gsap.killTweensOf(this.messageLabel.scale);
         this.messageLabel.text = i18n.countdownReady;
@@ -77,7 +81,7 @@ export class GameCountdown extends Container {
             duration: 0.2,
             ease: "sine.in",
         });
-        // sfx.play("sfx-countdown.wav", { speed: 1.2, volume: 0.5 });
+        sfx.play("sfx-countdown.wav", { speed: 1.2, volume: 0.5 });
         this.messageLabel.y = 0;
         this.messageLabel.text = i18n.countdownGo;
         this.messageLabel.scale.set(0.8);
@@ -102,14 +106,14 @@ export class GameCountdown extends Container {
         gsap.killTweensOf(this.container);
         this.visible = true;
         this.playReadyAnimation();
-        // await this.cloud.playFormAnimation(0.7);
+        await this.cloud.playFormAnimation(0.7);
     }
 
     /** Play "Go!" animation then hides the countdown */
     public async hide() {
         this.playGoAnimation();
         await waitFor(0.6);
-        // await this.cloud.playDismissAnimation(0.7);
+        await this.cloud.playDismissAnimation(0.7);
         this.visible = false;
     }
 }
